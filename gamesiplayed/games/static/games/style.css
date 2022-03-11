@@ -11286,3 +11286,31 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+.games-container ul {
+    list-style: none;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.games-container ul li {
+    float: left;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 16px;
+}
+
+.games-container ul li a {
+    display: block;
+    width: 300px;
+    height: 450px;
+}
+
+.games-container ul li a:hover {
+    opacity: 0.8;
+}
+
+.games-container ul li a img {
+    width: 300px;
+    height: 450px;
+}
