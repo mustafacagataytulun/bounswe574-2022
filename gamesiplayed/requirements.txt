@@ -73,7 +73,6 @@ ssh-import-id==5.10
 termcolor==1.1.0
 texttable==1.6.4
 Twisted==18.9.0
-ubuntu-advantage-tools==27.6
 ufw==0.36
 unattended-upgrades==0.1
 urllib3==1.26.8
