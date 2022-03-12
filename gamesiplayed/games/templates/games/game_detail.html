@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="Games that I played." />
         <meta name="author" content="Mustafa Çağatay Tulun" />
-        <title>Games I Played</title>
+        <title>{{ game.game_title }} - Games I Played</title>
         <!-- Core theme CSS (includes Bootstrap)-->
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'games/style.css' %}">
@@ -25,22 +25,45 @@
         </nav>
         <!-- Page content-->
         <div class="container">
-            <div class="text-center mt-5">
-                <h1>Games</h1>
-                <p class="lead">These are some of the games I have played.</p>
+            <div class="row">
+                <div class="text-center mt-5 col-12">
+                    <h1>{{ game.game_title }}</h1>
+                    <p class="lead">{{ game_data.description }}</p>
+                </div>
             </div>
-            <div class="mt-5 games-container">
-                {% if game_list %}
-                <ul>
-                    {% for game in game_list %}
-                    <li><a href="{% url 'games:detail' game.id %}"><img src="{{ game.cover_image_uri }}" alt="{{ game.game_title }}" /></a></li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>No games are available.</p>
-                {% endif %}
-                <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="mt-5 game-detail-container col-8">
+                    <img src="{{ game.cover_image_uri }}" alt="{{ game.game_title }}" />
+                    <dl>
+                        {% if game_data.genre %}
+                        <dt>Genre</dt>
+                        <dd>{{ game_data.genre }}</dd>
+                        {% endif %}
+
+                        {% if game_data.developer %}
+                        <dt>Developer</dt>
+                        <dd>{{ game_data.developer }}</dd>
+                        {% endif %}
+
+                        {% if game_data.publisher %}
+                        <dt>Publisher</dt>
+                        <dd>{{ game_data.publisher }}</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+                <div class="col-2"></div>
             </div>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <div class="mt-5">
+                        <p><a href="{% url 'games:index' %}">&laquo; Back to List</a></p>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="clearfix"></div>
         </div>
 
         <footer>

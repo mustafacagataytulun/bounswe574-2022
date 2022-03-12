@@ -11314,3 +11314,13 @@ textarea.form-control-lg {
     width: 300px;
     height: 450px;
 }
+
+.game-detail-container img {
+    float: right;
+    width: 300px;
+    height: 450px;
+}
+
+.game-detail-container dl dd {
+    margin-bottom: 32px;
+}
