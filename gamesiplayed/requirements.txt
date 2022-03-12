@@ -19,7 +19,6 @@ constantly==15.1.0
 cryptography==2.8
 dbus-python==1.2.16
 distro==1.4.0
-distro-info===0.23ubuntu1
 Django==4.0.3
 docker==4.4.4
 docker-compose==1.25.5
