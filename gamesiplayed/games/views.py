@@ -7,6 +7,7 @@ from games.models import Game
 
 class IndexView(generic.ListView):
     model = Game
+    ordering = ['-completion_date']
 
 class DetailView(generic.DetailView):
     model = Game
