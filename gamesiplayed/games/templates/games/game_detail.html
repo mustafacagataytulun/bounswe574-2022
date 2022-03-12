@@ -50,6 +50,9 @@
                         <dt>Publisher</dt>
                         <dd>{{ game_data.publisher }}</dd>
                         {% endif %}
+
+                        <dt>My Completion Date</dt>
+                        <dd>{{ game.completion_date | date:"d F Y" }}</dd>
                     </dl>
                 </div>
                 <div class="col-2"></div>
