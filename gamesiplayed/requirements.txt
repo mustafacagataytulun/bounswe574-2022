@@ -15,7 +15,6 @@ colorama==0.4.3
 configobj==5.0.6
 constantly==15.1.0
 cryptography==2.8
-dbus-python==1.2.16
 distro==1.4.0
 Django==4.0.3
 docker==4.4.4
