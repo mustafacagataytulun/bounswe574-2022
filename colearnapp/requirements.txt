@@ -2,4 +2,7 @@ asgiref==3.5.0
 backports.zoneinfo==0.2.1
 Django==4.0.3
 psycopg2-binary==2.9.3
+pylint==2.12.2
+pylint-django==2.5.2
+pylint-plugin-utils==0.7
 sqlparse==0.4.2

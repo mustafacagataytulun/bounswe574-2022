@@ -2,20 +2,32 @@ version: 2.1
 
 jobs:
   test-and-lint:
-    working_directory: ~/colearnapp
     docker:
-      - image: cimg/python:3.10.1
+      - image: cimg/python:3.8.10
     steps:
       - checkout
+      - restore_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "colearnapp/requirements.txt" }}
       - run:
           name: install dependencies
-          command: pip install -r requirements.txt
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r colearnapp/requirements.txt
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "colearnapp/requirements.txt" }}
+          paths:
+            - "venv"
       - run:
           name: lint
-          command: pylint my_media/ media_organizer/
+          command: |
+            . venv/bin/activate
+            pylint colearnapp/colearnapp/
       - run:
           name: run tests
-          command: python manage.py test
+          command: |
+            . venv/bin/activate
+            python3 colearnapp/manage.py test
 
 workflows:
   build-and-test-workflow:
