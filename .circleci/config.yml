@@ -31,8 +31,20 @@ jobs:
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
+  build-and-push:
+    docker:
+      - image: cimg/python:3.8.10
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.11
+          docker_layer_caching: true
+      - run: docker build -t mustafacagataytulun/colearnapp:$CIRCLE_BRANCH ./colearnapp
 
 workflows:
   build-and-test-workflow:
     jobs:
       - test-and-lint
+      - build-and-push:
+          requires:
+            - test-and-lint
