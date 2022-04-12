@@ -34,12 +34,16 @@ jobs:
   build-and-push:
     docker:
       - image: cimg/python:3.8.10
+    resource_class: small
     steps:
       - checkout
       - setup_remote_docker:
           version: 20.10.11
           docker_layer_caching: true
-      - run: docker build -t mustafacagataytulun/colearnapp:$CIRCLE_BRANCH ./colearnapp
+      - run: |
+          echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
+      - run: docker build -t beawolf/colearnapp:$CIRCLE_BUILD_NUM -t beawolf/colearnapp:latest ./colearnapp
+      - run: docker push beawolf/colearnapp:$CIRCLE_BUILD_NUM
 
 workflows:
   build-and-test-workflow:
