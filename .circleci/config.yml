@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.0.3
+
 jobs:
   test-and-lint:
     docker:
@@ -31,6 +34,8 @@ jobs:
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
+      - sonarcloud/scan
+      
   build-and-push:
     docker:
       - image: cimg/python:3.8.10
