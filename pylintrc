@@ -1,0 +1,16 @@
+[MESSAGES CONTROL]
+disable=
+	missing-module-docstring,
+	missing-class-docstring,
+	missing-function-docstring,
+	no-member,
+	invalid-name,
+	invalid-str-returned,
+	redefined-builtin,
+	too-few-public-methods
+
+[FORMAT]
+max-line-length=240
+
+[MASTER]
+ignore=migrations
