@@ -6,7 +6,11 @@ disable=
 	no-member,
 	invalid-name,
 	invalid-str-returned,
-	redefined-builtin
+	redefined-builtin,
+	too-few-public-methods
 
 [FORMAT]
 max-line-length=240
+
+[MASTER]
+ignore=migrations

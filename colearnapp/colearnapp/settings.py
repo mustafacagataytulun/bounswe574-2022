@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +133,33 @@ STATIC_ROOT = 'static'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Auth
+
+AUTH_USER_MODEL = "users.ColearnAppUser"
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "dashboard"
+
+# Email
+
+try:
+    EMAIL_HOST = os.environ['EMAIL_HOST']
+except KeyError:
+    print('EMAIL_HOST environment variable must be defined to send emails.')
+    sys.exit(1)
+
+try:
+    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+except KeyError:
+    print('EMAIL_HOST_USER environment variable must be defined to send emails.')
+    sys.exit(1)
+
+try:
+    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+except KeyError:
+    print('EMAIL_HOST_PASSWORD environment variable must be defined to send emails.')
+    sys.exit(1)
+
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL') if os.environ.get('EMAIL_USE_SSL') else False
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS') if os.environ.get('EMAIL_USE_TLS') else True
+EMAIL_PORT = os.environ.get('EMAIL_PORT') if os.environ.get('EMAIL_PORT') else 587
