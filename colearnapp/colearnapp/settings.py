@@ -82,16 +82,25 @@ WSGI_APPLICATION = 'colearnapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+DB_NAME = os.environ.get('DB_NAME') if os.environ.get('DB_NAME') else 'colearnapp'
+DB_USER = os.environ.get('DB_USER') if os.environ.get('DB_USER') else 'postgres'
+DB_HOST = os.environ.get('DB_HOST') if os.environ.get('DB_HOST') else 'localhost'
+DB_PORT = os.environ.get('DB_PORT') if os.environ.get('DB_PORT') else 5432
+
+try:
+    DB_PASSWORD = os.environ['DB_PASSWORD']
+except KeyError:
+    print('DB_PASSWORD environment variable must be defined for this application to work.')
+    sys.exit(1)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'colearnapp',
-        'USER': 'postgres',
-        'HOST': 'localhost',
-        'PORT': 5432,
-        'OPTIONS': {
-            'passfile': '.pgpass',
-        },
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
+        'PASSWORD': DB_PASSWORD,
     }
 }
 
