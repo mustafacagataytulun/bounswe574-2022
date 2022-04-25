@@ -50,6 +50,12 @@ jobs:
       - run: docker build -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:${CIRCLE_SHA1} -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:latest ./colearnapp
       - gcr/gcr-auth
       - run: docker push --all-tags gcr.io/${GOOGLE_PROJECT_ID}/colearnapp
+
+  deploy:
+    docker:
+      - image: 'cimg/base:stable'
+    resource_class: small
+    steps:
       - cloudrun/init
       - cloudrun/deploy:
           image: 'gcr.io/${GOOGLE_PROJECT_ID}/test-${CIRCLE_SHA1}'
@@ -65,3 +71,6 @@ workflows:
       - build-and-push:
           requires:
             - test-and-lint
+      - deploy:
+          requires:
+            - build-and-push
