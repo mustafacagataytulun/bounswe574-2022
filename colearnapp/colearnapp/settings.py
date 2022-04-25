@@ -29,12 +29,19 @@ except KeyError:
     sys.exit(1)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+DEBUG = os.environ.get('DEBUG') if os.environ.get('DEBUG') else False
 
 ALLOWED_HOSTS = [
-    '*',
+    'colearnapp-7r3xxs4pca-ew.a.run.app',
+    'localhost',
 ]
 
+SECURE_HSTS_SECONDS  = os.environ.get('IS_HTTPS_ENABLED') if 31536000 else 0
+SECURE_SSL_REDIRECT = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
+SESSION_COOKIE_SECURE = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
+CSRF_COOKIE_SECURE = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
+CSRF_TRUSTED_ORIGINS = ['https://colearnapp-7r3xxs4pca-ew.a.run.app']
 
 # Application definition
 
@@ -107,6 +114,7 @@ DATABASES = {
     }
 }
 
+CONN_MAX_AGE = 120
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
