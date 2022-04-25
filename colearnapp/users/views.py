@@ -7,12 +7,6 @@ def dashboard(request):
     return render(request, "users/dashboard.html")
 
 def register(request):
-    if request.method == "GET":
-        return render(
-            request, "users/register_form.html",
-            {"form": CustomUserCreationForm}
-        )
-
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
 
@@ -24,4 +18,12 @@ def register(request):
                 request, "users/register_done.html"
             )
 
-    return None
+        return render(
+            request, "users/register_form.html",
+            {"form": CustomUserCreationForm}
+        )
+
+    return render(
+        request, "users/register_form.html",
+        {"form": CustomUserCreationForm}
+    )
