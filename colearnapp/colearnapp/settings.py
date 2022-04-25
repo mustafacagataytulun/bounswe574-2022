@@ -39,7 +39,7 @@ ALLOWED_HOSTS = [
 ]
 
 SECURE_HSTS_SECONDS  = os.environ.get('SECURE_HSTS_SECONDS') if os.environ.get('SECURE_HSTS_SECONDS') else 0
-SECURE_SSL_REDIRECT = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
 CSRF_COOKIE_SECURE = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
 CSRF_TRUSTED_ORIGINS = [
