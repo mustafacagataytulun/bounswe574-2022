@@ -33,6 +33,7 @@ except KeyError:
 DEBUG = os.environ.get('DEBUG') if os.environ.get('DEBUG') else False
 
 ALLOWED_HOSTS = [
+    'colearnapp.mustafatulun.com',
     'colearnapp-7r3xxs4pca-ew.a.run.app',
     'localhost',
 ]
@@ -41,7 +42,10 @@ SECURE_HSTS_SECONDS  = os.environ.get('SECURE_HSTS_SECONDS') if os.environ.get('
 SECURE_SSL_REDIRECT = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
 SESSION_COOKIE_SECURE = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
 CSRF_COOKIE_SECURE = os.environ.get('IS_HTTPS_ENABLED') if os.environ.get('IS_HTTPS_ENABLED') else False
-CSRF_TRUSTED_ORIGINS = ['https://colearnapp-7r3xxs4pca-ew.a.run.app']
+CSRF_TRUSTED_ORIGINS = [
+    'https://colearnapp.mustafatulun.com',
+    'https://colearnapp-7r3xxs4pca-ew.a.run.app',
+]
 
 # Application definition
 
