@@ -60,7 +60,7 @@ jobs:
       - run:
           name: deploy to cloud run
           command: |
-            gcloud run deploy colearnapp --image gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:${CIRCLE_SHA1} --min-instances=0 --max-instances=4 --allow-unauthenticated --region=europe-west1 --cpu=1 --memory=128Mi --port 8000 --timeout=15 --update-env-vars SECRET_KEY=${SECRET_KEY},DB_HOST=${DB_HOST},DB_PASSWORD=${DB_PASSWORD},EMAIL_HOST=${EMAIL_HOST},EMAIL_HOST_USER=${EMAIL_HOST_USER},EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+            gcloud run deploy colearnapp --verbosity=debug --image gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:${CIRCLE_SHA1} --min-instances=0 --max-instances=4 --allow-unauthenticated --region=europe-west1 --cpu=1 --memory=128Mi --port 8000 --timeout=15 --update-env-vars SECRET_KEY=${SECRET_KEY},DB_HOST=${DB_HOST},DB_PASSWORD=${DB_PASSWORD},EMAIL_HOST=${EMAIL_HOST},EMAIL_HOST_USER=${EMAIL_HOST_USER},EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
 
 workflows:
   build-and-test-workflow:
