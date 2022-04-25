@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  gcp-cloud-run: circleci/gcp-cloud-run@1.0.2
   sonarcloud: sonarsource/sonarcloud@1.0.3
 
 jobs:
@@ -49,6 +50,15 @@ jobs:
           echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
       - run: docker build -t beawolf/colearnapp:$CIRCLE_BUILD_NUM -t beawolf/colearnapp:latest ./colearnapp
       - run: docker push --all-tags beawolf/colearnapp
+      - cloudrun/init
+      - cloudrun/build:
+          tag: 'gcr.io/${GOOGLE_PROJECT_ID}/test-${CIRCLE_SHA1}'
+      - cloudrun/deploy:
+          image: 'gcr.io/${GOOGLE_PROJECT_ID}/test-${CIRCLE_SHA1}'
+          platform: managed
+          region: europe-west1
+          service-name: colearnapp
+          unauthenticated: true
 
 workflows:
   build-and-test-workflow:
