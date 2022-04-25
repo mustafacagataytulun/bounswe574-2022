@@ -32,7 +32,7 @@ class RegisterViewTests(TestCase):
         password1 = "y$T&P!NAPL$wu8hX"
         password2 = "y$T&P!NAPL$wu8hX"
         interests = "example interests"
-        response = self.client.post(reverse('register'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests})
+        response = self.client.post(reverse('register'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests}, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Your account has been created successfully.')
 

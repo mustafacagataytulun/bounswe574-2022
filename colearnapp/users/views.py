@@ -1,5 +1,7 @@
 from django.contrib.auth import login
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from .forms import CustomUserCreationForm
 
@@ -14,16 +16,12 @@ def register(request):
             user = form.save()
             login(request, user)
 
-            return render(
-                request, "users/register_done.html"
-            )
+            return HttpResponseRedirect(reverse('register_success'))
 
-        return render(
-            request, "users/register_form.html",
-            {"form": CustomUserCreationForm}
-        )
+    else:
+        form = CustomUserCreationForm()
 
-    return render(
-        request, "users/register_form.html",
-        {"form": CustomUserCreationForm}
-    )
+    return render(request, 'users/register_form.html', {'form': form})
+
+def register_success(request):
+    return render(request, 'users/register_done.html')
