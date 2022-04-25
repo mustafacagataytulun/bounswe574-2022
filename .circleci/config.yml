@@ -48,7 +48,7 @@ jobs:
           docker_layer_caching: true
       - run: |
           echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
-      - run: docker build -t beawolf/colearnapp:$CIRCLE_BUILD_NUM -t beawolf/colearnapp:latest -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:${CIRCLE_SHA1} gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:latest ./colearnapp
+      - run: docker build -t beawolf/colearnapp:$CIRCLE_BUILD_NUM -t beawolf/colearnapp:latest -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:${CIRCLE_SHA1} -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:latest ./colearnapp
       - run: docker push --all-tags beawolf/colearnapp
       - run: docker push --all-tags gcr.io/${GOOGLE_PROJECT_ID}/colearnapp
       - cloudrun/init
