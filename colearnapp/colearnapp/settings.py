@@ -101,6 +101,9 @@ DATABASES = {
         'HOST': DB_HOST,
         'PORT': DB_PORT,
         'PASSWORD': DB_PASSWORD,
+        'OPTIONS': {
+            'connect_timeout': 5,
+        }
     }
 }
 
