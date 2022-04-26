@@ -33,7 +33,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest --junitxml=test-results/junit.xml
+            pytest --junitxml=test-results/junit.xml colearnapp
       - store_test_results:
           path: test-results
       - sonarcloud/scan
