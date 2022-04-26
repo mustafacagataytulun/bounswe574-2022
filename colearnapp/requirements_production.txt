@@ -1,5 +1,8 @@
 asgiref==3.5.0
 backports.zoneinfo==0.2.1
+beautifulsoup4==4.11.1
 Django==4.0.4
+django-bootstrap5==21.3
 psycopg2-binary==2.9.3
+soupsieve==2.3.2.post1
 sqlparse==0.4.2

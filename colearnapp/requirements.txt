@@ -2,8 +2,11 @@ asgiref==3.5.0
 astroid==2.11.2
 attrs==21.4.0
 backports.zoneinfo==0.2.1
+beautifulsoup4==4.11.1
+coverage==6.3.2
 dill==0.3.4
 Django==4.0.4
+django-bootstrap5==21.3
 iniconfig==1.1.1
 isort==5.10.1
 lazy-object-proxy==1.7.1
@@ -19,6 +22,7 @@ pylint-plugin-utils==0.7
 pyparsing==3.0.8
 pytest==7.1.1
 pytest-django==4.5.2
+soupsieve==2.3.2.post1
 sqlparse==0.4.2
 tomli==2.0.1
 typing-extensions==4.1.1
