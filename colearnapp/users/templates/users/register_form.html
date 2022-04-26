@@ -1,13 +1,25 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
 
 {% block content %}
-<h2>Register</h2>
+<div class="row justify-content-center">
+    <div class="col-4 mt-5">
+        <h2 class="text-center">Register</h2>
+        <p>You have one step left to join among other colearners. Create your user account in under a minute by filling the form below.</p>
 
-<form method="post">
-    {% csrf_token %}
-    {{form}}
-    <input type="submit" value="Register">
-</form>
+        <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
 
-<a href="{% url 'login' %}">Back to login</a>
+            <div class="row mb-4">
+                <div class="col d-flex">
+                </div>
+
+                <div class="col d-flex justify-content-end">
+                    {% bootstrap_button button_type="submit" content="Register" %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

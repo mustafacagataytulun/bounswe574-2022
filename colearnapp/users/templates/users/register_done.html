@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
 
 {% block content %}
-<h2>Registration Complete</h2>
+<div class="row justify-content-center">
+    <div class="col-4 mt-5">
+        <h2 class="text-center">Register</h2>
+        <p>Congratulations! Your account has been created successfully.</p>
+        <p>You can join colearning spaces now to start colearning. If you cannot find what you are looking for, you can even create your own colearning space!</p>
 
-<p>Your account has been created successfully.</p>
-
-<a href="{% url 'dashboard' %}">Back to dashboard</a>
-
+        <p class="mt-5"><a href="{% url 'dashboard' %}">&laquo; Back to Home</a></p>
+    </div>
+</div>
 {% endblock %}
