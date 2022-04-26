@@ -1,8 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import ColearnAppUser
-
 class RegisterViewTests(TestCase):
     def test_form(self):
         """
@@ -48,27 +46,3 @@ class RegisterViewTests(TestCase):
         response = self.client.post(reverse('register'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<form method="post">')
-
-class DashboardViewTests(TestCase):
-    def test_view(self):
-        """
-        Dashboard should greet users with Hello message.
-        """
-        response = self.client.get(reverse('dashboard'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Hello')
-
-class ColearnAppUserModelTests(TestCase):
-    def test_create_user(self):
-        """
-        User should be created successfully.
-        """
-        email = "example@example.com"
-        username = "example"
-        password = "test"
-        interests = "example interests"
-        user = ColearnAppUser.objects.create_user(email=email, username=username, password=password, interests=interests)
-
-        self.assertEqual(user.email, email)
-        self.assertEqual(user.username, username)
-        self.assertEqual(user.interests, interests)
