@@ -16,4 +16,4 @@ class ColearnAppUserModelTests(TestCase):
         self.assertEqual(user.email, email)
         self.assertEqual(user.username, username)
         self.assertEqual(user.interests, interests)
-        self.assertRegex(user.password, '^pbkdf2_sha256\$320000\$')
+        self.assertRegex(user.password, r'^pbkdf2_sha256\$320000\$')
