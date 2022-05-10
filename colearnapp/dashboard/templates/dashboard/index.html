@@ -52,7 +52,10 @@
         {% endfor %}
     </ul>
     {% else %}
-    <p>No spaces are available.</p>
+    <p class="text-center">No space has been created, yet.</p>
+        {% if user.is_authenticated %}
+        <p class="text-center">Why don't you <a href="{% url 'spaces:create' %}">create a new one</a>?</p>
+        {% endif %}
     {% endif %}
     <div class="clearfix"></div>
 </div>
