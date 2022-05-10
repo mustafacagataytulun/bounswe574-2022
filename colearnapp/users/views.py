@@ -5,9 +5,6 @@ from django.urls import reverse
 
 from .forms import CustomUserCreationForm
 
-def dashboard(request):
-    return render(request, "users/dashboard.html")
-
 def register(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
