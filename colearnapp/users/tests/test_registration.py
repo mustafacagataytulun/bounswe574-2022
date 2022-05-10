@@ -6,7 +6,7 @@ class RegisterViewTests(TestCase):
         """
         User registration form should contain necessary inputs.
         """
-        response = self.client.get(reverse('register'))
+        response = self.client.get(reverse('users:register'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<form method="post">')
         self.assertContains(response, '<label class="form-label" for="id_email">')
@@ -30,7 +30,7 @@ class RegisterViewTests(TestCase):
         password1 = "y$T&P!NAPL$wu8hX"
         password2 = "y$T&P!NAPL$wu8hX"
         interests = "example interests"
-        response = self.client.post(reverse('register'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests}, follow=True)
+        response = self.client.post(reverse('users:register'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests}, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Your account has been created successfully.')
 
@@ -43,6 +43,6 @@ class RegisterViewTests(TestCase):
         password1 = "test"
         password2 = "test"
         interests = "example interests"
-        response = self.client.post(reverse('register'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests})
+        response = self.client.post(reverse('users:register'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<form method="post">')
