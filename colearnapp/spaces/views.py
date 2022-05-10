@@ -24,7 +24,7 @@ def create(request):
             storage = SpaceCoversStorage()
             storage.save(str(space.id) + cover_image_extension, cover_image)
 
-            return redirect('create_success', id=space.id)
+            return redirect('spaces:create_success', id=space.id)
 
     else:
         form = SpaceCreateForm()
