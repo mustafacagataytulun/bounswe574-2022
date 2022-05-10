@@ -28,7 +28,7 @@ jobs:
           name: lint
           command: |
             . venv/bin/activate
-            pylint colearnapp/colearnapp/ colearnapp/users/
+            pylint colearnapp/colearnapp/ colearnapp/users/ colearnapp/spaces/
       - run:
           name: run tests
           command: |

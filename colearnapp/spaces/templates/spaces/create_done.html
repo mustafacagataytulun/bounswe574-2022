@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-4 mt-5">
+        <h2 class="text-center">Create Space</h2>
+        <p class="text-center">Your space has been created successfully.</p>
+        <p class="mt-5 text-center"><a href="{% url 'view' id %}">Go to your Space &raquo;</a></p>
+    </div>
+</div>
+{% endblock %}
