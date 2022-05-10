@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap5',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -193,3 +194,16 @@ except KeyError:
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL') if os.environ.get('EMAIL_USE_SSL') else False
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS') if os.environ.get('EMAIL_USE_TLS') else True
 EMAIL_PORT = os.environ.get('EMAIL_PORT') if os.environ.get('EMAIL_PORT') else 587
+
+# AWS
+try:
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+except KeyError:
+    print('AWS_ACCESS_KEY_ID environment variable must be defined for AWS integration to work.')
+    sys.exit(1)
+
+try:
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+except KeyError:
+    print('AWS_SECRET_ACCESS_KEY environment variable must be defined for AWS integration to work.')
+    sys.exit(1)

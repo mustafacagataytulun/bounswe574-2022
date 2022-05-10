@@ -7,14 +7,9 @@
         <h2 class="text-center">Create Space</h2>
         <p>You can create a space to start colearning with others.</p>
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% bootstrap_form form %}
-
-            <div class="mb-4">
-                <label for="cover-image" class="form-label">Cover Image</label>
-                <input type="file" class="form-control" id="cover-image">
-            </div>
 
             <div class="row mb-4">
                 <div class="col d-flex">
