@@ -1,0 +1,29 @@
+.spaces-container ul {
+    list-style: none;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.spaces-container ul li {
+    float: left;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 16px;
+}
+
+.spaces-container ul li a {
+    display: block;
+    width: 300px;
+    height: auto;
+    text-align: center;
+}
+
+.spaces-container ul li a:hover {
+    opacity: 0.8;
+}
+
+.spaces-container ul li a img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+}
