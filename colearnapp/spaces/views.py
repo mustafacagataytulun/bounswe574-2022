@@ -14,7 +14,9 @@ def create(request):
         form = SpaceCreateForm(request.POST, request.FILES)
 
         if form.is_valid():
-            space = form.save()
+            space = form.save(commit=False)
+            space.created_by = request.user
+            space.save()
 
             cover_image = request.FILES['cover_image']
             cover_image_extension = os.path.splitext(str(cover_image))[1]
