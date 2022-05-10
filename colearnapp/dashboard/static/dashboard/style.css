@@ -22,7 +22,8 @@
     opacity: 0.8;
 }
 
-.spaces-container ul li a img {
+.spaces-container ul li a img,
+.space-cover-image {
     width: 300px;
     height: 300px;
     object-fit: cover;

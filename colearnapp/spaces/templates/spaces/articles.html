@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-auto px-4">
+      <div class="my-5">
+        <img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" class="space-cover-image" />
+      </div>
+      <div class="">
+        <h3>Colearners</h3>
+        <ul class="list-group list-group-flush">
+          <a href="#" class="list-group-item list-group-item-action">Steve Carell</a>
+          <a href="#" class="list-group-item list-group-item-action">Rainn Wilson</a>
+          <a href="#" class="list-group-item list-group-item-action">Jenna Fisher</a>
+          <a href="#" class="list-group-item list-group-item-action">Paul Lieberstein</a>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row my-5">
+        <div class="col-10 text-center">
+          <h1>{{ space.name }}</h1>
+        </div>
+        <div class="col-2 text-end">
+          {% bootstrap_button button_type="submit" content="Join" %}
+        </div>
+      </div>
+      <div class="row">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Articles</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Questions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Quizzes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Glossary</a>
+          </li>
+        </ul>
+      </div>
+      <div class="row my-2">
+        <div class="col-10">
+          <ul class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action">How to Setup Environment Before Starting</a>
+            <a href="#" class="list-group-item list-group-item-action">Your First Script</a>
+            <a href="#" class="list-group-item list-group-item-action">Start() &amp; Update()</a>
+          </ul>
+        </div>
+        <div class="col-2 text-end">
+          {% bootstrap_button button_type="submit" content="New Article" %}
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

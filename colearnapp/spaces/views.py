@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from .forms import SpaceCreateForm
+from .models import Space
 
 #pylint: disable=W0223
 class SpaceCoversStorage(S3Boto3Storage):
@@ -33,5 +34,7 @@ def create(request):
 def create_success(request, id):
     return render(request, 'spaces/create_done.html', {'id':id})
 
-def view(request, id):
-    return render(request, 'spaces/view.html', {'id':id})
+def articles(request, id):
+    space = Space.objects.get(pk=id)
+
+    return render(request, 'spaces/articles.html', {'space':space})

@@ -23,7 +23,7 @@
     <ul>
         {% for space in own_spaces %}
         <li>
-            <a href="#"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
+            <a href="{% url 'spaces:view' space.id %}"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
         </li>
         {% endfor %}
         <li>
@@ -47,7 +47,7 @@
     <ul>
         {% for space in all_spaces %}
         <li>
-            <a href="#"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
+            <a href="{% url 'spaces:view' space.id %}"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
         </li>
         {% endfor %}
     </ul>
