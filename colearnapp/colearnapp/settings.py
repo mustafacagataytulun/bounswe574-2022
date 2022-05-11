@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap5',
+    'markdownify.apps.MarkdownifyConfig',
     'storages',
 ]
 
@@ -214,3 +215,45 @@ except KeyError:
     sys.exit(1)
 
 AWS_STORAGE_BUCKET_NAME = 'colearnapp-static'
+
+# Markdownify
+
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            'a',
+            'abbr',
+            'acronym',
+            'b',
+            'blockquote',
+            'em',
+            'i',
+            'li',
+            'ol',
+            'p',
+            'span',
+            'strong',
+            's',
+            'ul',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'hr',
+            'pre',
+            'code',
+            'table',
+            'tr',
+            'th',
+            'td',
+            'img',
+        ],
+        "WHITELIST_ATTRS": [
+            'href',
+            'src',
+            'alt',
+        ],
+    }
+}
