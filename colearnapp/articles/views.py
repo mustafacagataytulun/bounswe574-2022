@@ -18,7 +18,15 @@ def view(request, space_id, id):
     if not article:
         return HttpResponseNotFound()
 
-    return render(request, 'articles/view.html', {'space': space, 'article': article})
+    has_user_joined = False
+
+    if request.user.is_authenticated:
+        has_user_joined = request.user.has_joined_to_space(space_id)
+
+    return render(request, 'articles/view.html', {
+        'space': space,
+        'article': article,
+        'has_user_joined':has_user_joined })
 
 @login_required
 def create(request, space_id):

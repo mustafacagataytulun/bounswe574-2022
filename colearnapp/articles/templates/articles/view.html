@@ -8,7 +8,15 @@
         <a href="{% url 'spaces:articles' space.id %}">&laquo; Back to Colearning Space</a>
     </div>
     <div class="col text-end">
-        <a href="{% url 'articles:edit' space.id article.id %}" class="btn btn-secondary">Edit Article</a>
+        {% if user.is_authenticated %}
+            {% if has_user_joined %}
+            <a href="{% url 'articles:edit' space.id article.id %}" class="btn btn-secondary">Edit Article</a>
+            {% else %}
+            <span title="You must join this Colearning Space to edit articles." data-bs-toggle="tooltip">
+                <button type="submit" class="btn btn-secondary" disabled>Edit Article</button>
+            </span>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 <div class="row">
