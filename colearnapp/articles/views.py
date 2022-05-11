@@ -17,15 +17,13 @@ def view(request, space_id, id):
 
     if not article:
         return HttpResponseNotFound()
-
-    has_user_joined = False
-
-    if request.user.is_authenticated:
-        has_user_joined = request.user.has_joined_to_space(space_id)
+        
+    has_user_joined = request.user.is_authenticated & request.user.has_joined_to_space(space_id)
 
     return render(request, 'articles/view.html', {
         'space': space,
         'article': article,
+        'user': request.user,
         'has_user_joined':has_user_joined })
 
 @login_required
@@ -54,4 +52,9 @@ def create_success(request, space_id, id):
 
 @login_required
 def edit(request, space_id, id):
+    has_user_joined = request.user.is_authenticated & request.user.has_joined_to_space(space_id)
+
+    if not has_user_joined:
+        return redirect('articles:view', space_id=space_id, id=id)
+
     return render(request, 'articles/edit_form.html', {'space_id': space_id, 'id': id})
