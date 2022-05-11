@@ -65,7 +65,7 @@
         </div>
         <div class="col-2 text-end">
           {% if has_user_joined %}
-          <a href="{% url 'spaces:create_article' space.id %}" class="btn btn-primary">New Article</a>
+          <a href="{% url 'articles:create' space.id %}" class="btn btn-primary">New Article</a>
           {% else %}
           <span title="You must join this Colearning Space to create articles." data-bs-toggle="tooltip">
             <button type="submit" class="btn btn-secondary" disabled>New Article</button>

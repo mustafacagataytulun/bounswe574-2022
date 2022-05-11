@@ -19,5 +19,6 @@ from django.urls import path
 urlpatterns = [
     path('', include("dashboard.urls")),
     path('spaces/', include("spaces.urls")),
+    path('spaces/<int:space_id>/articles/', include("articles.urls")),
     path('users/', include("users.urls")),
 ]

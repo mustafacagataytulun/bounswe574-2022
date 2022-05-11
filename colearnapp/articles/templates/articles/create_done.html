@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col mt-5 text-center">
+        <h2>Create Article</h2>
+        <p>Your article has been created successfully.</p>
+        <p class="mt-5"><a href="{% url 'articles:view' space_id id %}">Go to the Article &raquo;</a></p>
+    </div>
+</div>
+{% endblock %}

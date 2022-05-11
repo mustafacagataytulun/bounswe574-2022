@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic.base import RedirectView
 
-from .views import articles, create, create_article, create_success, join, leave
+from .views import articles, create, create_success, join, leave
 
 app_name = 'spaces'
 
@@ -12,5 +12,4 @@ urlpatterns = [
     path('<int:id>/join', join, name='join'),
     path('<int:id>/leave', leave, name='leave'),
     path('<int:id>/articles', articles, name='articles'),
-    path('<int:space_id>/articles/create', create_article, name='create_article'),
 ]

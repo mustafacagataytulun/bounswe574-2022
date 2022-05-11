@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col">
+        <a href="{% url 'spaces:articles' space.id %}">&laquo; Back to Colearning Space</a>
+    </div>
+    <div class="col text-end">
+        <a href="{% url 'articles:edit' space.id article.id %}" class="btn btn-secondary">Edit Article</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col mt-5">
+        <h2 class="text-center">{{ article.title }}</h2>
+        
+    </div>
+</div>
+
+{% endblock %}

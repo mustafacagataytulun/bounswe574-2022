@@ -66,6 +66,3 @@ def leave(request, id):
         space.subscribed_users.remove(request.user)
 
     return redirect('spaces:view', id=space.id)
-
-def create_article():
-    return
