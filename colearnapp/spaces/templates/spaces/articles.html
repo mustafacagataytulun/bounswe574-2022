@@ -9,12 +9,15 @@
       </div>
       <div class="">
         <h3>Colearners</h3>
+        {% if joined_users.count > 0 %}
         <ul class="list-group list-group-flush">
-          <a href="#" class="list-group-item list-group-item-action">Steve Carell</a>
-          <a href="#" class="list-group-item list-group-item-action">Rainn Wilson</a>
-          <a href="#" class="list-group-item list-group-item-action">Jenna Fisher</a>
-          <a href="#" class="list-group-item list-group-item-action">Paul Lieberstein</a>
+          {% for user in joined_users %}
+          <a href="#" class="list-group-item list-group-item-action">{{ user.username }}</a>
+          {% endfor %}
         </ul>
+        {% else %}
+        <p>There is no colearner joined to this space.</p>
+        {% endif %}
       </div>
     </div>
     <div class="col">
@@ -23,7 +26,17 @@
           <h1>{{ space.name }}</h1>
         </div>
         <div class="col-2 text-end">
-          {% bootstrap_button button_type="submit" content="Join" %}
+          {% if has_user_joined %}
+          <form method="post" action="{% url 'spaces:leave' space.id %}">
+            {% csrf_token %}
+            {% bootstrap_button button_type="submit" content="Leave" button_class="btn-secondary" %}
+          </form>
+          {% else %}
+          <form method="post" action="{% url 'spaces:join' space.id %}">
+            {% csrf_token %}
+            {% bootstrap_button button_type="submit" content="Join" %}
+          </form>
+          {% endif %}
         </div>
       </div>
       <div class="row">
@@ -51,7 +64,13 @@
           </ul>
         </div>
         <div class="col-2 text-end">
-          {% bootstrap_button button_type="submit" content="New Article" %}
+          {% if has_user_joined %}
+          <a href="{% url 'spaces:create_article' space.id %}" class="btn btn-primary">New Article</a>
+          {% else %}
+          <span title="You must join this Colearning Space to create articles." data-bs-toggle="tooltip">
+            <button type="submit" class="btn btn-secondary" disabled>New Article</button>
+          </span>
+          {% endif %}
         </div>
       </div>
     </div>

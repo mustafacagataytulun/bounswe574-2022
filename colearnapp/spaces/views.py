@@ -39,5 +39,33 @@ def create_success(request, id):
 
 def articles(request, id):
     space = Space.objects.get(pk=id)
+    has_user_joined = request.user.has_joined_to_space(id)
+    joined_users = space.subscribed_users.all()
 
-    return render(request, 'spaces/articles.html', {'space':space})
+    return render(request, 'spaces/articles.html', {
+        'space':space,
+        'has_user_joined':has_user_joined,
+        'joined_users':joined_users})
+
+@login_required
+def join(request, id):
+    has_user_joined = request.user.has_joined_to_space(id)
+
+    if not has_user_joined:
+        space = Space.objects.get(pk=id)
+        space.subscribed_users.add(request.user)
+
+    return redirect('spaces:view', id=space.id)
+
+@login_required
+def leave(request, id):
+    has_user_joined = request.user.has_joined_to_space(id)
+
+    if has_user_joined:
+        space = Space.objects.get(pk=id)
+        space.subscribed_users.remove(request.user)
+
+    return redirect('spaces:view', id=space.id)
+
+def create_article():
+    return
