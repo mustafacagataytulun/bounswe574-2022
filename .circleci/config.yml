@@ -47,7 +47,7 @@ jobs:
       - setup_remote_docker:
           version: 20.10.11
           docker_layer_caching: true
-      - run: docker build -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:${CIRCLE_SHA1} -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:latest ./colearnapp
+      - run: docker build --squash --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:${CIRCLE_SHA1} -t gcr.io/${GOOGLE_PROJECT_ID}/colearnapp:latest ./colearnapp
       - gcr/gcr-auth
       - run:
           name: Delete existing images on GCR
