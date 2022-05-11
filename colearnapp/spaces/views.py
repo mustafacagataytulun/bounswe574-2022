@@ -43,13 +43,13 @@ def articles(request, id):
     space = Space.objects.get(pk=id)
     has_user_joined = request.user.has_joined_to_space(id)
     joined_users = space.subscribed_users.all()
-    articles = Article.objects.filter(space_id=id)
+    article_list = Article.objects.filter(space_id=id)
 
     return render(request, 'spaces/articles.html', {
         'space':space,
         'has_user_joined':has_user_joined,
         'joined_users':joined_users,
-        'articles':articles,})
+        'articles':article_list,})
 
 @login_required
 def join(request, id):
