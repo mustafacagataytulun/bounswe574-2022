@@ -161,6 +161,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 
+if not os.environ.get('DEBUG'):
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -209,3 +212,5 @@ try:
 except KeyError:
     print('AWS_SECRET_ACCESS_KEY environment variable must be defined for AWS integration to work.')
     sys.exit(1)
+
+AWS_STORAGE_BUCKET_NAME = 'colearnapp-static'
