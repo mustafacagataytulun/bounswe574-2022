@@ -1,5 +1,6 @@
 import os
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -10,6 +11,7 @@ from .models import Space
 class SpaceCoversStorage(S3Boto3Storage):
     bucket_name = 'colearnapp-space-covers'
 
+@login_required
 def create(request):
     if request.method == "POST":
         form = SpaceCreateForm(request.POST, request.FILES)
@@ -31,6 +33,7 @@ def create(request):
 
     return render(request, 'spaces/create_form.html', {'form': form})
 
+@login_required
 def create_success(request, id):
     return render(request, 'spaces/create_done.html', {'id':id})
 
