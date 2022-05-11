@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
+from articles.models import Article
+
 from .forms import SpaceCreateForm
 from .models import Space
 
@@ -41,11 +43,13 @@ def articles(request, id):
     space = Space.objects.get(pk=id)
     has_user_joined = request.user.has_joined_to_space(id)
     joined_users = space.subscribed_users.all()
+    articles = Article.objects.filter(space_id=id)
 
     return render(request, 'spaces/articles.html', {
         'space':space,
         'has_user_joined':has_user_joined,
-        'joined_users':joined_users})
+        'joined_users':joined_users,
+        'articles':articles,})
 
 @login_required
 def join(request, id):

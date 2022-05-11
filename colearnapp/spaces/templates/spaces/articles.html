@@ -57,11 +57,15 @@
       </div>
       <div class="row my-2">
         <div class="col-10">
+          {% if articles.count > 0 %}
           <ul class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action">How to Setup Environment Before Starting <span class="badge bg-success">12</span></a>
-            <a href="#" class="list-group-item list-group-item-action">Your First Script <span class="badge bg-success">8</span></a>
-            <a href="#" class="list-group-item list-group-item-action">Start() &amp; Update() <span class="badge bg-danger">-2</span></a>
+            {% for article in articles %}
+            <a href="{% url 'articles:view' space.id article.id %}" class="list-group-item list-group-item-action">{{ article.title }} <span class="badge bg-success">12</span></a>
+            {% endfor %}
           </ul>
+          {% else %}
+          <p>There is no article in this space, yet. Why don't you create one?</p>
+          {% endif %}
         </div>
         <div class="col-2 text-end">
           {% if has_user_joined %}
