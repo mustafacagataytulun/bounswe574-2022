@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load markdownify %}
+{% load django_bootstrap5 %}
 
 {% block content %}
 
@@ -53,6 +54,39 @@
                 " aria-label="Downvote"></i></a>
         </p>
         {{ article.content|markdownify }}
+        <hr class="mt-5" />
+        <div class="row justify-content-center">
+            <div class="col-6 mt-5">
+                <h3 class="text-center mb-4">Comments</h3>
+                {{ query }}
+                {% if comments %}
+                    {% for comment in comments %}
+                    <p>{{ comment.content}}</p>
+                    <p class="text-end text-muted">{{ comment.created_by.username }} &ndash; {{ comment.created_date }}</p>
+                    <div class="row justify-content-center"><div class="col-4"><hr /></div></div>
+                    {% endfor %}
+                {% else %}
+                <p>Nobody has commented on this article, yet. Do you want to be first?</p>
+                {% endif %}
+                {% if has_user_joined %}
+                <form class="mt-5" method="post" action="{% url 'articles:save_comment' space.id article.id %}">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+
+                    <div class="row mb-4">
+                        <div class="col d-flex">
+                        </div>
+
+                        <div class="col d-flex justify-content-end">
+                            {% bootstrap_button button_type="submit" content="Send" %}
+                        </div>
+                    </div>
+                </form>
+                {% else %}
+                <p class="text-center mt-5 text-muted">You must join to this colearning space to write a comment.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 

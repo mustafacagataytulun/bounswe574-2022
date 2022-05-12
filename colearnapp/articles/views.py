@@ -6,15 +6,17 @@ from django.utils import timezone
 
 from spaces.models import Space
 
-from .forms import ArticleSaveForm
-from .models import Article
+from .forms import ArticleSaveForm, CommentSaveForm
+from .models import Article, Comment
 
 def view(request, space_id, id):
     space = get_object_or_404(Space, pk=space_id)
     article = get_object_or_404(Article, pk=id)
-    has_user_joined = request.user.is_authenticated & request.user.has_joined_to_space(space_id)
+    comments = Comment.objects.filter(article__id = id)
+    has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(space_id)
     has_user_upvoted = request.user in article.upvoters.all()
     has_user_downvoted = request.user in article.downvoters.all()
+    form = CommentSaveForm()
 
     return render(request, 'articles/view.html', {
         'space': space,
@@ -22,7 +24,30 @@ def view(request, space_id, id):
         'user': request.user,
         'has_user_joined':has_user_joined,
         'has_user_upvoted': has_user_upvoted,
-        'has_user_downvoted': has_user_downvoted, })
+        'has_user_downvoted': has_user_downvoted,
+        'form': form, 
+        'comments': comments, })
+
+@login_required
+def save_comment(request, space_id, id):
+    has_user_joined = request.user.has_joined_to_space(space_id)
+
+    if not has_user_joined:
+        return redirect('articles:view', space_id=space_id, id=id)
+
+    get_object_or_404(Space, pk=space_id)
+    article = get_object_or_404(Article, pk=id)
+    comment = Comment()
+
+    form = CommentSaveForm(request.POST or None, instance=comment)
+
+    if request.method == "POST" and form.is_valid():
+        comment = form.save(commit=False)
+        comment.created_by = request.user
+        comment.article = article
+        comment.save()
+
+    return redirect('articles:view', space_id=space_id, id=id)
 
 @login_required
 def save(request, space_id, id=None):

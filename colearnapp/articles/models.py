@@ -19,3 +19,9 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    content = models.TextField(max_length=1024)
+    created_date = models.DateTimeField(default=timezone.now)
+    created_by = models.ForeignKey('users.ColearnAppUser', related_name='article_comment_created_by_user', on_delete=models.SET_NULL, null=True)
+    article = models.ForeignKey(Article, on_delete=models.RESTRICT)
