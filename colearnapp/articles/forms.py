@@ -2,7 +2,7 @@ from django import forms
 
 from .models import Article
 
-class ArticleCreateForm(forms.ModelForm):
+class ArticleSaveForm(forms.ModelForm):
     prerequisites = forms.CharField(label="Recommended Prerequisites", required=False)
 
     class Meta:
