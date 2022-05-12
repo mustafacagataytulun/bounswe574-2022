@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotFound
+from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -10,23 +10,19 @@ from .forms import ArticleSaveForm
 from .models import Article
 
 def view(request, space_id, id):
-    space = Space.objects.get(pk=space_id)
-
-    if not space:
-        return HttpResponseNotFound()
-
-    article = Article.objects.get(pk=id)
-
-    if not article:
-        return HttpResponseNotFound()
-
+    space = get_object_or_404(Space, pk=space_id)
+    article = get_object_or_404(Article, pk=id)
     has_user_joined = request.user.is_authenticated & request.user.has_joined_to_space(space_id)
+    has_user_upvoted = request.user in article.upvoters.all()
+    has_user_downvoted = request.user in article.downvoters.all()
 
     return render(request, 'articles/view.html', {
         'space': space,
         'article': article,
         'user': request.user,
-        'has_user_joined':has_user_joined })
+        'has_user_joined':has_user_joined,
+        'has_user_upvoted': has_user_upvoted,
+        'has_user_downvoted': has_user_downvoted, })
 
 @login_required
 def save(request, space_id, id=None):
@@ -63,3 +59,49 @@ def save(request, space_id, id=None):
 @login_required
 def save_success(request, space_id, id):
     return render(request, 'articles/save_success.html', {'space_id': space_id, 'id': id})
+
+@login_required
+def upvote(request, space_id, id):
+    space = get_object_or_404(Space, pk=space_id)
+    article = get_object_or_404(Article, pk=id)
+    has_user_joined = request.user.has_joined_to_space(space_id)
+
+    if not has_user_joined:
+        return redirect('articles:view', space_id=space.id, id=article.id)
+
+    if request.user not in article.upvoters.all():
+        if request.user in article.downvoters.all():
+            article.downvoters.remove(request.user)
+            Article.objects.filter(pk=id).update(score=F('score') + 2)
+        else:
+            Article.objects.filter(pk=id).update(score=F('score') + 1)
+
+        article.upvoters.add(request.user)
+    else:
+        article.upvoters.remove(request.user)
+        Article.objects.filter(pk=id).update(score=F('score') - 1)
+
+    return redirect('articles:view', space_id=space.id, id=article.id)
+
+@login_required
+def downvote(request, space_id, id):
+    space = get_object_or_404(Space, pk=space_id)
+    article = get_object_or_404(Article, pk=id)
+    has_user_joined = request.user.has_joined_to_space(space_id)
+
+    if not has_user_joined:
+        return redirect('articles:view', space_id=space.id, id=article.id)
+
+    if request.user not in article.downvoters.all():
+        if request.user in article.upvoters.all():
+            article.upvoters.remove(request.user)
+            Article.objects.filter(pk=id).update(score=F('score') - 2)
+        else:
+            Article.objects.filter(pk=id).update(score=F('score') - 1)
+
+        article.downvoters.add(request.user)
+    else:
+        article.downvoters.remove(request.user)
+        Article.objects.filter(pk=id).update(score=F('score') + 1)
+
+    return redirect('articles:view', space_id=space.id, id=article.id)

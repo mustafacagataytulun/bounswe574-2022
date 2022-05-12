@@ -60,7 +60,15 @@
           {% if articles.count > 0 %}
           <ul class="list-group list-group-flush">
             {% for article in articles %}
-            <a href="{% url 'articles:view' space.id article.id %}" class="list-group-item list-group-item-action">{{ article.title }} <span class="badge bg-success">12</span></a>
+            <a href="{% url 'articles:view' space.id article.id %}" class="list-group-item list-group-item-action">{{ article.title }} 
+              <span class="badge 
+              {% if article.score >= 0 %}
+              bg-success
+              {% else %}
+              bg-danger
+              {% endif %}
+              ">{{ article.score }}</span>
+            </a>
             {% endfor %}
           </ul>
           {% else %}

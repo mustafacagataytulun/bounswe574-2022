@@ -29,6 +29,29 @@
             &ndash; Last Updated by <a href="#">{{ article.updated_by.username }}</a> on {{ article.updated_date.date }}
             {% endif %}
         </p>
+        <p class="text-center">
+            <a href="{% url 'articles:upvote' space.id article.id %}" title="Upvote"><i class="bi-caret-up-fill
+                {% if has_user_upvoted %}
+                text-success
+                {% else %}
+                text-secondary
+                {% endif %}
+                " aria-label="Upvote"></i></a> 
+            <span class="mx-2 badge 
+            {% if article.score >= 0 %}
+            bg-success
+            {% else %}
+            bg-danger
+            {% endif %}
+            ">{{ article.score }}</span> 
+            <a href="{% url 'articles:downvote' space.id article.id %}" title="Downvote"><i class="bi-caret-down-fill 
+                {% if has_user_downvoted %}
+                text-danger
+                {% else %}
+                text-secondary
+                {% endif %}
+                " aria-label="Downvote"></i></a>
+        </p>
         {{ article.content|markdownify }}
     </div>
 </div>

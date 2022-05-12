@@ -13,6 +13,9 @@ class Article(models.Model):
     updated_date = models.DateTimeField(blank=True, null=True)
     updated_by = models.ForeignKey('users.ColearnAppUser', related_name='updated_by_user', on_delete=models.SET_NULL, null=True, blank=True)
     space = models.ForeignKey(Space, on_delete=models.RESTRICT)
+    upvoters = models.ManyToManyField('users.ColearnAppUser', related_name='article_upvoter_users')
+    downvoters = models.ManyToManyField('users.ColearnAppUser', related_name='article_downvoter_users')
+    score = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
