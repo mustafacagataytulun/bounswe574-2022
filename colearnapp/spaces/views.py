@@ -1,7 +1,7 @@
 import os
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from articles.models import Article
@@ -66,20 +66,20 @@ def glossary(request, id):
 
 @login_required
 def join(request, id):
+    space = get_object_or_404(Space, pk=id)
     has_user_joined = request.user.has_joined_to_space(id)
 
     if not has_user_joined:
-        space = Space.objects.get(pk=id)
         space.subscribed_users.add(request.user)
 
     return redirect('spaces:view', id=space.id)
 
 @login_required
 def leave(request, id):
+    space = get_object_or_404(Space, pk=id)
     has_user_joined = request.user.has_joined_to_space(id)
 
     if has_user_joined:
-        space = Space.objects.get(pk=id)
         space.subscribed_users.remove(request.user)
 
     return redirect('spaces:view', id=space.id)
