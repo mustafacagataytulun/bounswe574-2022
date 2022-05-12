@@ -52,6 +52,7 @@ CSRF_TRUSTED_ORIGINS = [
 INSTALLED_APPS = [
     'articles',
     'dashboard',
+    'glossary',
     'spaces',
     'users',
     'django.contrib.auth',

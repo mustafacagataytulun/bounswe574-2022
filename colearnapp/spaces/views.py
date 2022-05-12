@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from articles.models import Article
+from glossary.models import GlossaryItem
 
 from .forms import SpaceCreateForm
 from .models import Space
@@ -50,6 +51,18 @@ def articles(request, id):
         'has_user_joined':has_user_joined,
         'joined_users':joined_users,
         'articles':article_list,})
+
+def glossary(request, id):
+    space = Space.objects.get(pk=id)
+    has_user_joined = request.user.has_joined_to_space(id)
+    joined_users = space.subscribed_users.all()
+    glossary_items = GlossaryItem.objects.filter(space_id=id).order_by('term')
+
+    return render(request, 'spaces/glossary.html', {
+        'space':space,
+        'has_user_joined':has_user_joined,
+        'joined_users':joined_users,
+        'glossary_items':glossary_items,})
 
 @login_required
 def join(request, id):
