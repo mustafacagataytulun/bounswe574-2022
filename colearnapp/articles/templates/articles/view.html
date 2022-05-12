@@ -22,7 +22,13 @@
 <div class="row">
     <div class="col mt-5">
         <h1 class="text-center">{{ article.title }}</h1>
-        <p class="text-center text-muted">Written by <a href="#">{{ article.created_by.username }}</a> on {{ article.created_date }}</p>
+        <p class="text-center text-muted">
+            Written by <a href="#">{{ article.created_by.username }}</a> on {{ article.created_date.date }}
+
+            {% if article.updated_by and article.updated_date %}
+            &ndash; Last Updated by <a href="#">{{ article.updated_by.username }}</a> on {{ article.updated_date.date }}
+            {% endif %}
+        </p>
         {{ article.content|markdownify }}
     </div>
 </div>
