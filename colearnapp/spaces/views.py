@@ -42,7 +42,7 @@ def create_success(request, id):
 
 def articles(request, id):
     space = Space.objects.get(pk=id)
-    has_user_joined = request.user.has_joined_to_space(id)
+    has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(id)
     joined_users = space.subscribed_users.all()
     article_list = Article.objects.filter(space_id=id)
 
