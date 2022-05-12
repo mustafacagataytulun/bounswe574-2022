@@ -58,18 +58,22 @@
       <div class="row my-2">
         <div class="col-10">
           {% if glossary_items.count > 0 %}
-          <ul class="list-group list-group-flush">
+          <dl class="row">
             {% for glossary_item in glossary_items %}
-            <a href="{% url 'articles:view' space.id article.id %}" class="list-group-item list-group-item-action">{{ article.title }} <span class="badge bg-success">12</span></a>
+            <dt class="col-2">{{ glossary_item.term }}</dt>
+            <dd class="{{ has_user_joined|yesno:'col-9,col-10' }}">{{ glossary_item.definition }}</dd>
+            {% if has_user_joined %}
+            <span class="col-1 text-end"><a href="{% url 'glossary:edit' space.id glossary_item.id %}"><small>Edit</small></a></span>
+            {% endif %}
             {% endfor %}
-          </ul>
+          </dl>
           {% else %}
           <p>The glossary of this space is empty. Why don't you add some terms and definitions?</p>
           {% endif %}
         </div>
         <div class="col-2 text-end">
           {% if has_user_joined %}
-          <a href="#" class="btn btn-primary">New Term</a>
+          <a href="{% url 'glossary:create' space.id %}" class="btn btn-primary">New Term</a>
           {% else %}
           <span title="You must join this Colearning Space to create glossary items." data-bs-toggle="tooltip">
             <button type="submit" class="btn btn-secondary" disabled>New Term</button>

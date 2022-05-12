@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col mt-5">
+        <h2 class="text-center">Save Glossary Term</h2>
+        <p class="text-center">All changes you have made will be saved in <em>{{ space.name }}</em> Colearning Space.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <div class="row mb-4">
+                <div class="col d-flex">
+                </div>
+
+                <div class="col d-flex justify-content-end">
+                    {% bootstrap_button button_type="submit" content="Save" %}
+                </div>
+            </div>
+        </form>
+
+        <p class="mt-5"><a href="{% url 'spaces:glossary' space.id %}">&laquo; Back to {{ space.name }} Space</a></p>
+    </div>
+</div>
+{% endblock %}

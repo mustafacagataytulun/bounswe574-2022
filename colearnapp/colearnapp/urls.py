@@ -20,5 +20,6 @@ urlpatterns = [
     path('', include("dashboard.urls")),
     path('spaces/', include("spaces.urls")),
     path('spaces/<int:space_id>/articles/', include("articles.urls")),
+    path('spaces/<int:space_id>/glossary/', include("glossary.urls")),
     path('users/', include("users.urls")),
 ]

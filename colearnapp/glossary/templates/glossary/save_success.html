@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col mt-5 text-center">
+        <h2>Save Glossary Term</h2>
+        <p>The glossary term has been saved successfully.</p>
+        <p class="mt-5"><a href="{% url 'spaces:glossary' space_id %}">Go to the Glossary &raquo;</a></p>
+    </div>
+</div>
+{% endblock %}
