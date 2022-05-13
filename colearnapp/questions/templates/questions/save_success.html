@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col mt-5 text-center">
+        <h2>Save Question</h2>
+        <p>The question has been saved successfully.</p>
+        <p class="mt-5"><a href="{% url 'questions:view' space_id id %}">Go to the Question &raquo;</a></p>
+    </div>
+</div>
+{% endblock %}

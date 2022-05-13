@@ -42,10 +42,10 @@
       <div class="row">
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'spaces:articles' space.id %}">Articles</a>
+            <a class="nav-link" href="{% url 'spaces:articles' space.id %}">Articles</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'spaces:questions' space.id %}">Questions</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'spaces:questions' space.id %}">Questions</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Quizzes</a>
@@ -57,30 +57,30 @@
       </div>
       <div class="row my-2">
         <div class="col-10">
-          {% if articles.count > 0 %}
+          {% if questions.count > 0 %}
           <ul class="list-group list-group-flush">
-            {% for article in articles %}
-            <a href="{% url 'articles:view' space.id article.id %}" class="list-group-item list-group-item-action">{{ article.title }} 
+            {% for question in questions %}
+            <a href="{% url 'questions:view' space.id question.id %}" class="list-group-item list-group-item-action">{{ question.title }} 
               <span class="badge 
-              {% if article.score >= 0 %}
+              {% if question.score >= 0 %}
               bg-success
               {% else %}
               bg-danger
               {% endif %}
-              ">{{ article.score }}</span>
+              ">{{ question.score }}</span>
             </a>
             {% endfor %}
           </ul>
           {% else %}
-          <p>There is no article in this space, yet. Why don't you create one?</p>
+          <p>There is no question in this space, yet. Do you want to be the first one to ask?</p>
           {% endif %}
         </div>
         <div class="col-2 text-end">
           {% if has_user_joined %}
-          <a href="{% url 'articles:create' space.id %}" class="btn btn-primary">New Article</a>
+          <a href="{% url 'questions:create' space.id %}" class="btn btn-primary">New Question</a>
           {% else %}
-          <span title="You must join this Colearning Space to create articles." data-bs-toggle="tooltip">
-            <button type="submit" class="btn btn-secondary" disabled>New Article</button>
+          <span title="You must join this Colearning Space to ask questions." data-bs-toggle="tooltip">
+            <button type="submit" class="btn btn-secondary" disabled>New Question</button>
           </span>
           {% endif %}
         </div>

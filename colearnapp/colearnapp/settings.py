@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'articles',
     'dashboard',
     'glossary',
+    'questions',
     'spaces',
     'users',
     'django.contrib.auth',

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load markdownify %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col">
+        <a href="{% url 'spaces:questions' space.id %}">&laquo; Back to Colearning Space</a>
+    </div>
+    <div class="col text-end">
+        {% if user.is_authenticated %}
+            {% if has_user_joined %}
+            <a href="{% url 'questions:edit' space.id question.id %}" class="btn btn-secondary">Edit Question</a>
+            {% else %}
+            <span title="You must join this Colearning Space to edit questions." data-bs-toggle="tooltip">
+                <button type="submit" class="btn btn-secondary" disabled>Edit Question</button>
+            </span>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col mt-5">
+        <div class="row">
+            <div class="col-1 mt-3">
+                <p class="text-center">
+                    <a href="{% url 'questions:upvote' space.id question.id %}" title="Upvote"><i class="bi-caret-up-fill
+                        {% if request.user in question.upvoters.all %}
+                        text-success
+                        {% else %}
+                        text-secondary
+                        {% endif %}
+                        " aria-label="Upvote"></i></a> 
+                    <span class="mx-2 badge 
+                    {% if question.score >= 0 %}
+                    bg-success
+                    {% else %}
+                    bg-danger
+                    {% endif %}
+                    ">{{ question.score }}</span> 
+                    <a href="{% url 'questions:downvote' space.id question.id %}" title="Downvote"><i class="bi-caret-down-fill 
+                        {% if request.user in question.downvoters.all %}
+                        text-danger
+                        {% else %}
+                        text-secondary
+                        {% endif %}
+                        " aria-label="Downvote"></i></a>
+                </p>
+            </div>
+            <div class="col-11">
+                <h1>{{ question.title }}</h1>
+                {{ question.content|markdownify }}
+                <p class="text-end text-muted">
+                    Asked by <a href="#">{{ question.created_by.username }}</a> on {{ question.created_date }}
+        
+                    {% if question.updated_by and question.updated_date %}
+                    <br /> Last Updated by <a href="#">{{ question.updated_by.username }}</a> on {{ question.updated_date }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-11 offset-1 mt-5">
+                <h3 class="mb-4">Answers</h3>
+            </div>
+            {% if answers %}
+                {% for answer in answers %}
+                <div class="col-1 mt-3">
+                    <p class="text-center">
+                        <a href="{% url 'questions:upvote_answer' space.id question.id answer.id %}" title="Upvote"><i class="bi-caret-up-fill
+                            {% if request.user in answer.upvoters.all %}
+                            text-success
+                            {% else %}
+                            text-secondary
+                            {% endif %}
+                            " aria-label="Upvote"></i></a> 
+                        <span class="mx-2 badge 
+                        {% if answer.score >= 0 %}
+                        bg-success
+                        {% else %}
+                        bg-danger
+                        {% endif %}
+                        ">{{ answer.score }}</span> 
+                        <a href="{% url 'questions:downvote_answer' space.id question.id answer.id %}" title="Downvote"><i class="bi-caret-down-fill 
+                            {% if request.user in answer.downvoters.all %}
+                            text-danger
+                            {% else %}
+                            text-secondary
+                            {% endif %}
+                            " aria-label="Downvote"></i></a>
+                    </p>
+                </div>
+                <div class="col-11">
+                    <p>{{ answer.content|markdownify }}</p>
+                    <p class="text-end text-muted">
+                        Answered by <a href="#">{{ answer.created_by.username }}</a> on {{ answer.created_date }}
+            
+                        {% if answer.updated_by and answer.updated_date %}
+                        <br /> Last Updated by <a href="#">{{ answer.updated_by.username }}</a> on {{ answer.updated_date }}
+                        {% endif %}
+                    </p>
+                    <div class="row justify-content-center"><div class="col-4"><hr /></div></div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="col-11 offset-1">
+                <p>Nobody has answered this question, yet. Do you want to be first?</p>
+            </div>
+            {% endif %}
+            <div class="col-11 offset-1">
+                {% if has_user_joined %}
+                <form class="mt-5" method="post" action="{% url 'questions:save_answer' space.id question.id %}">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+
+                    <div class="row mb-4">
+                        <div class="col d-flex">
+                        </div>
+
+                        <div class="col d-flex justify-content-end">
+                            {% bootstrap_button button_type="submit" content="Send" %}
+                        </div>
+                    </div>
+                </form>
+                {% else %}
+                <p class="text-center mt-5 text-muted">You must join to this colearning space to answer questions.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

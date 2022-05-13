@@ -6,6 +6,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 from articles.models import Article
 from glossary.models import GlossaryItem
+from questions.models import Question
 
 from .forms import SpaceCreateForm
 from .models import Space
@@ -51,6 +52,18 @@ def articles(request, id):
         'has_user_joined':has_user_joined,
         'joined_users':joined_users,
         'articles':article_list,})
+
+def questions(request, id):
+    space = Space.objects.get(pk=id)
+    has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(id)
+    joined_users = space.subscribed_users.all()
+    question_list = Question.objects.filter(space_id=id)
+
+    return render(request, 'spaces/questions.html', {
+        'space':space,
+        'has_user_joined':has_user_joined,
+        'joined_users':joined_users,
+        'questions':question_list,})
 
 def glossary(request, id):
     space = Space.objects.get(pk=id)
