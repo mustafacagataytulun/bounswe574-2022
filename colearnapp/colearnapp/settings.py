@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'dashboard',
     'glossary',
     'questions',
+    'quizzes',
     'spaces',
     'users',
     'django.contrib.auth',

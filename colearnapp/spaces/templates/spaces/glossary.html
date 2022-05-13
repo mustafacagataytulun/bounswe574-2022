@@ -48,7 +48,7 @@
             <a class="nav-link" href="{% url 'spaces:questions' space.id %}">Questions</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Quizzes</a>
+            <a class="nav-link" href="{% url 'spaces:quizzes' space.id %}">Quizzes</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'spaces:glossary' space.id %}">Glossary</a>

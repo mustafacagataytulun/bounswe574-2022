@@ -7,6 +7,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from articles.models import Article
 from glossary.models import GlossaryItem
 from questions.models import Question
+from quizzes.models import Quiz
 
 from .forms import SpaceCreateForm
 from .models import Space
@@ -64,6 +65,18 @@ def questions(request, id):
         'has_user_joined':has_user_joined,
         'joined_users':joined_users,
         'questions':question_list,})
+
+def quizzes(request, id):
+    space = get_object_or_404(Space, pk=id)
+    has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(id)
+    joined_users = space.subscribed_users.all()
+    quiz_list = Quiz.objects.filter(space_id=id)
+
+    return render(request, 'spaces/quizzes.html', {
+        'space':space,
+        'has_user_joined':has_user_joined,
+        'joined_users':joined_users,
+        'quizzes':quiz_list,})
 
 def glossary(request, id):
     space = Space.objects.get(pk=id)
