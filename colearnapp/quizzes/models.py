@@ -23,4 +23,4 @@ class Answer(models.Model):
     is_correct = models.BooleanField(null=False, default=False)
     created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey('users.ColearnAppUser', related_name='quiz_answer_created_by_user', on_delete=models.SET_NULL, null=True)
-    article = models.ForeignKey(Quiz, on_delete=models.RESTRICT)
+    quiz = models.ForeignKey(Quiz, on_delete=models.RESTRICT)
