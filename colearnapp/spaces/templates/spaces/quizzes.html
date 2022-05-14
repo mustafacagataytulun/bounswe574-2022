@@ -60,7 +60,7 @@
           {% if quizzes.count > 0 %}
           <ul class="list-group list-group-flush">
             {% for quiz in quizzes %}
-            <a href="#" class="list-group-item list-group-item-action">{{ quiz.question }} 
+            <a href="{% url 'quizzes:view' space.id quiz.id %}" class="list-group-item list-group-item-action">{{ quiz.question }} 
               <span class="badge 
               {% if quiz.score >= 0 %}
               bg-success

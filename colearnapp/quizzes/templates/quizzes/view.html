@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load markdownify %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col">
+        <a href="{% url 'spaces:quizzes' space.id %}">&laquo; Back to Colearning Space</a>
+    </div>
+    <div class="col text-end">
+        {% if user.is_authenticated %}
+            {% if has_user_joined %}
+            <a href="{% url 'quizzes:edit' space.id quiz.id %}" class="btn btn-secondary">Edit Quiz</a>
+            {% else %}
+            <span title="You must join this Colearning Space to edit quizzes." data-bs-toggle="tooltip">
+                <button type="submit" class="btn btn-secondary" disabled>Edit Quiz</button>
+            </span>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col mt-5">
+        <h1 class="display-6">{{ quiz.question }}</h1>
+        <p class="text-center text-muted">
+            Written by <a href="#">{{ quiz.created_by.username }}</a> on {{ quiz.created_date.date }}
+
+            {% if quiz.updated_by and quiz.updated_date %}
+            &ndash; Last Updated by <a href="#">{{ quiz.updated_by.username }}</a> on {{ quiz.updated_date.date }}
+            {% endif %}
+        </p>
+        <p class="text-center">
+            <a href="{% url 'quizzes:upvote' space.id quiz.id %}" title="Upvote"><i class="bi-caret-up-fill
+                {% if has_user_upvoted %}
+                text-success
+                {% else %}
+                text-secondary
+                {% endif %}
+                " aria-label="Upvote"></i></a> 
+            <span class="mx-2 badge 
+            {% if quiz.score >= 0 %}
+            bg-success
+            {% else %}
+            bg-danger
+            {% endif %}
+            ">{{ quiz.score }}</span> 
+            <a href="{% url 'quizzes:downvote' space.id quiz.id %}" title="Downvote"><i class="bi-caret-down-fill 
+                {% if has_user_downvoted %}
+                text-danger
+                {% else %}
+                text-secondary
+                {% endif %}
+                " aria-label="Downvote"></i></a>
+        </p>
+        <div class="row">
+            <div class="mt-5">
+                {% if has_user_joined %}
+                <form class="mb-4" method="post">
+                    {% csrf_token %}
+                    {% for answer in answers %}
+                    <div class="form-check mb-2">
+                        {% if attempted_answer_id == answer.id %}
+                        <input class="form-check-input" type="radio" name="attempted_answer_id" id="answer{{ answer.id }}" value="{{ answer.id }}" required checked />
+                        {% else %}
+                        <input class="form-check-input" type="radio" name="attempted_answer_id" id="answer{{ answer.id }}" value="{{ answer.id }}" required />
+                        {% endif %}
+                        <label class="form-check-label" for="answer{{ answer.id }}">
+                          {{ answer.content }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                    <div class="row mt-4">
+                        <div class="col">
+                            {% bootstrap_button button_type="submit" content="Check Answer" %}
+                        </div>
+                    </div>
+                </form>
+                    {% if attempted_answer_id %}
+                        {% if is_user_answer_correct %}
+                        <div class="alert alert-success">Congratulations! Your answer is correct.</div>
+                        {% else %}
+                        <div class="alert alert-danger">Oh, no! Your answer was wrong.</div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                <p class="text-center mt-5 text-muted">You must join to this colearning space to attempt this quiz.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
