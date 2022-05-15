@@ -23,3 +23,8 @@ python manage.py runserver
 The application uses CircleCI as a CI/CD tool. It is currently in progress.
 
 [https://app.circleci.com/pipelines/github/mustafacagataytulun/bounswe573-2022](https://app.circleci.com/pipelines/github/mustafacagataytulun/bounswe573-2022)
+
+## Attributions
+This application uses following assets:
+
+- [Profile avatar placeholder large](https://commons.wikimedia.org/wiki/File:Profile_avatar_placeholder_large.png) under [BSD License](Google, Chromium project, BSD <http://opensource.org/licenses/bsd-license.php>, via Wikimedia Commons)

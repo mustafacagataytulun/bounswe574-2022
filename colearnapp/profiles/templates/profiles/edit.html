@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mt-5">
+        <h1 class="text-center h2">Edit Your Profile</h1>
+        <p class="text-center">You can fill your profile, so others can see it.</p>
+        <p class="text-center mb-5"><a href="#">&laquo; Back to Your Profile</a></p>
+    </div>
+    <div class="col-md-auto">
+        <label class="form-label d-block" for="id_profile_picture">Current Profile Picture</label>
+        <label class="form-label d-block" for="id_profile_picture">
+            <img src="https://colearnapp-profile-pictures.s3.eu-west-1.amazonaws.com/{{ user.id }}.jpg" alt="Profile picture of {{ user.username }}" class="profile-image" onerror="this.src='{% static 'profiles/profile-picture-placeholder.png' %}';" />
+        </label>
+    </div>
+    <div class="col">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <div class="row mb-4">
+                <div class="col d-flex">
+                </div>
+
+                <div class="col d-flex justify-content-end">
+                    {% bootstrap_button button_type="submit" content="Save" %}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    </div>
+</div>
+{% endblock %}

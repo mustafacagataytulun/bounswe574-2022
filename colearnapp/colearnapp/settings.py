@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'articles',
     'dashboard',
     'glossary',
+    'profiles',
     'questions',
     'quizzes',
     'spaces',
@@ -179,6 +180,7 @@ AUTH_USER_MODEL = "users.ColearnAppUser"
 LOGIN_URL = "users:login"
 LOGIN_REDIRECT_URL = "dashboard:index"
 LOGOUT_REDIRECT_URL = "dashboard:index"
+AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 # Email
 
