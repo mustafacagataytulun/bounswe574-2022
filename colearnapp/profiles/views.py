@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
+from spaces.models import Space
 from users.models import ColearnAppUser
 
 from .forms import ProfileEditForm
@@ -12,6 +13,16 @@ from .models import Profile
 #pylint: disable=W0223
 class ProfilePicturesStorage(S3Boto3Storage):
     bucket_name = 'colearnapp-profile-pictures'
+
+@login_required
+def view(request, id):
+    user = get_object_or_404(ColearnAppUser, pk=id)
+    user_spaces = Space.objects.filter(subscribed_users=user).order_by('name')
+
+    return render(request, 'profiles/view.html', {
+        'user': user,
+        'user_spaces': user_spaces,
+    })
 
 @login_required
 def edit(request):

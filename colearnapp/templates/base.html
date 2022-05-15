@@ -23,7 +23,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" aria-current="page" href="#">{{ user.username }}</a></li>
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="{% url 'profiles:view' request.user.id %}">{{ user.username }}</a></li>
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="{% url 'users:logout' %}">Logout</a></li>
                         {% else %}
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="{% url 'users:login' %}">Login</a></li>

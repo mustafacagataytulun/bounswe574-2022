@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load markdownify %}
+
+{% block content %}
+<div class="row mt-5">
+    <div class="col-md-auto me-5">
+        <img src="https://colearnapp-profile-pictures.s3.eu-west-1.amazonaws.com/{{ user.id }}.jpg" alt="Profile picture of {{ user.username }}" class="profile-image" onerror="this.src='{% static 'profiles/profile-picture-placeholder.png' %}';" />
+    </div>
+    <div class="col">
+        <h1 class="h2">{{ user.username }}</h1>
+
+        <h2 class="h5 mt-5">Bio</h2>
+        {% if user.profile.bio %}
+            {{ user.profile.bio|markdownify }}
+        {% else %}
+            <p class="text-muted">No info has been given.</p>
+        {% endif %}
+
+        <h2 class="h5 mt-5">Interests</h2>
+        {% if user.profile.interests %}
+            {{ user.profile.interests }}
+        {% else %}
+            <p class="text-muted">No info has been given.</p>
+        {% endif %}
+
+        <h2 class="h5 mt-5">Involved Colearning Spaces</h2>
+        {% if user_spaces %}
+        <ul class="list-group list-group-flush col-4">
+            {% for space in user_spaces %}
+            <li class="list-group-item"><a href="{% url 'spaces:view' space.id %}">{{ space.name }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            {% if user.id == request.user.id %}
+            <p class="text-muted">You have not joined any colearning space, yet.</p>
+            {% else %}
+            <p class="text-muted">This user has not joined any colearning space, yet.</p>
+            {% endif %}    
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

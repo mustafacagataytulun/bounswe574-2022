@@ -5,7 +5,7 @@
     <div class="col-4 mt-5">
         <h1 class="text-center h2">Edit Your Profile</h1>
         <p class="text-center">Your profile has been saved successfully.</p>
-        <p class="mt-5 text-center"><a href="#">Go to your Profile &raquo;</a></p>
+        <p class="mt-5 text-center"><a href="{% url 'profiles:view' request.user.id %}">Go to your Profile &raquo;</a></p>
     </div>
 </div>
 {% endblock %}
