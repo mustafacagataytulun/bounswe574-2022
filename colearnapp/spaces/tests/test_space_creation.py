@@ -38,11 +38,6 @@ class SpaceCreateViewTests(TestCase):
         """
         Space creation form should return to form if it is not valid.
         """
-        email = "example1@example.com"
-        username = "example1"
-        password1 = "test"
-        password2 = "test"
-        interests = "example interests"
-        response = self.client.post(reverse('spaces:create'), data={'email':email, 'username':username, 'password1': password1, 'password2': password2, 'interests': interests})
+        response = self.client.post(reverse('spaces:create'), data={})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<form method="post" enctype="multipart/form-data">')
