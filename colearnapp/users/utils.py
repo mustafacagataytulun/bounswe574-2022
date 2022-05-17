@@ -6,7 +6,7 @@ from django.test import TestCase
 from users.models import ColearnAppUser
 
 def create_random_string(char_count):
-       return ''.join(random.choice(string.ascii_letters) for _ in range(char_count))
+    return ''.join(random.choice(string.ascii_letters) for _ in range(char_count))
 
 def create_test_user():
     email = create_random_string(10) + "@example.com"
