@@ -26,6 +26,9 @@ def create(request):
             space.created_by = request.user
             space.save()
 
+            space.subscribed_users.add(request.user)
+            space.save()
+
             cover_image = request.FILES['cover_image']
             cover_image_extension = os.path.splitext(str(cover_image))[1]
             storage = SpaceCoversStorage()
