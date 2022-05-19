@@ -51,6 +51,9 @@
             <div class="col-11">
                 <h1>{{ question.title }}</h1>
                 {{ question.content|markdownify }}
+                {% for tag in space.get_tag_list %}
+                <span class="badge bg-info">{{ tag }}</span>
+                {% endfor %}
                 <p class="text-end text-muted">
                     Asked by <a href="#">{{ question.created_by.username }}</a> on {{ question.created_date }}
         
