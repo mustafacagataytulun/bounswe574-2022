@@ -10,6 +10,6 @@ class Space(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def get_tag_list(self):
         return self.tags.split(',')
