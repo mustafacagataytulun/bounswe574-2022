@@ -20,6 +20,9 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    def get_tag_list(self):
+        return self.tags.split(',')
+
 class Comment(models.Model):
     content = models.TextField(max_length=1024)
     created_date = models.DateTimeField(default=timezone.now)
