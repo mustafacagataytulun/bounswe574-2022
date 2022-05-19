@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils import timezone
 
+from colearnapp.base_models import TaggableEntity
 from spaces.models import Space
 
-class Article(models.Model):
+class Article(TaggableEntity):
     title = models.CharField(max_length=200)
-    tags = models.CharField(max_length=500, blank=True)
     prerequisites = models.CharField(max_length=2048, blank=True)
     content = models.TextField(max_length=65535)
     created_date = models.DateTimeField(default=timezone.now)
@@ -19,9 +19,6 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
-
-    def get_tag_list(self):
-        return self.tags.split(',')
 
 class Comment(models.Model):
     content = models.TextField(max_length=1024)

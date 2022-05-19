@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils import timezone
 
+from colearnapp.base_models import TaggableEntity
 from spaces.models import Space
 
-class Question(models.Model):
+class Question(TaggableEntity):
     title = models.CharField(max_length=200)
-    tags = models.CharField(max_length=500, blank=True)
     content = models.TextField(max_length=65535)
     created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey('users.ColearnAppUser', related_name='question_created_by_user', on_delete=models.SET_NULL, null=True)
@@ -18,9 +18,6 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
-
-    def get_tag_list(self):
-        return self.tags.split(',')
 
 class Answer(models.Model):
     content = models.TextField(max_length=1024)
