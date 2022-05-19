@@ -23,6 +23,11 @@
 <div class="row">
     <div class="col mt-5">
         <h1 class="display-6">{{ quiz.question }}</h1>
+        <p class="text-center">
+            {% for tag in space.get_tag_list %}
+            <span class="badge bg-info">{{ tag }}</span>
+            {% endfor %}
+        </p>
         <p class="text-center text-muted">
             Written by <a href="#">{{ quiz.created_by.username }}</a> on {{ quiz.created_date.date }}
 

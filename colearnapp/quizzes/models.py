@@ -18,6 +18,9 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
+    def get_tag_list(self):
+        return self.tags.split(',')
+
 class Answer(models.Model):
     content = models.TextField(max_length=500)
     is_correct = models.BooleanField(null=False, default=False)
