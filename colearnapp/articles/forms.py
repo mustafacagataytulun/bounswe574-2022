@@ -9,6 +9,7 @@ class ArticleSaveForm(forms.ModelForm):
         model = Article
         fields = ('title', 'tags', 'prerequisites', 'content',)
         help_texts = {
+            'tags': 'Separate tags with commas.',
             'content': 'You can use <a href="https://www.markdownguide.org/" target="_blank" />Markdown</a> to format the article.'
         }
 

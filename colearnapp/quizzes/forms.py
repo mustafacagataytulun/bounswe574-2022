@@ -10,3 +10,6 @@ class QuizSaveForm(forms.ModelForm):
     class Meta:
         model = Quiz
         fields = ('question', 'tags', 'answers',)
+        help_texts = {
+            'tags': 'Separate tags with commas.',
+        }

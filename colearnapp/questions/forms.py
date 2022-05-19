@@ -9,6 +9,9 @@ class QuestionSaveForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ('title', 'tags', 'content',)
+        help_texts = {
+            'tags': 'Separate tags with commas.',
+        }
 
 class AnswerSaveForm(forms.ModelForm):
     content = forms.CharField(label="Your Answer", required=True, widget=forms.Textarea(attrs={'placeholder': 'Please respect community rules.', 'rows': '5'}),
