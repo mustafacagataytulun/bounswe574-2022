@@ -24,6 +24,9 @@
       <div class="row my-5">
         <div class="col-10 text-center">
           <h1>{{ space.name }}</h1>
+          {% for tag in space.get_tag_list %}
+          <span class="badge bg-info">{{ tag }}</span>
+          {% endfor %}
         </div>
         <div class="col-2 text-end">
           {% if has_user_joined %}
