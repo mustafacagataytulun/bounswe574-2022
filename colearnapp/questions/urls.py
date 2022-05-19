@@ -4,6 +4,7 @@ from .views import downvote, downvote_answer, save, save_answer, save_success, u
 
 app_name = 'questions'
 
+#pylint: disable=R0801
 urlpatterns = [
     path('<int:id>', view, name='view'),
     path('create', save, name='create'),
