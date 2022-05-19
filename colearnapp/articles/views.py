@@ -25,7 +25,7 @@ def view(request, space_id, id):
         'has_user_joined':has_user_joined,
         'has_user_upvoted': has_user_upvoted,
         'has_user_downvoted': has_user_downvoted,
-        'form': form, 
+        'form': form,
         'comments': comments, })
 
 @login_required
