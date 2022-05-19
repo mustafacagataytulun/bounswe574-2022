@@ -14,8 +14,6 @@ def view(request, space_id, id):
     question = get_object_or_404(Question, pk=id)
     answers = Answer.objects.filter(question__id = id).order_by('-score', 'created_date')
     has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(space_id)
-    has_user_upvoted = request.user in question.upvoters.all()
-    has_user_downvoted = request.user in question.downvoters.all()
     form = AnswerSaveForm()
 
     return render(request, 'questions/view.html', {
@@ -23,8 +21,6 @@ def view(request, space_id, id):
         'question': question,
         'user': request.user,
         'has_user_joined':has_user_joined,
-        'has_user_upvoted': has_user_upvoted,
-        'has_user_downvoted': has_user_downvoted,
         'form': form,
         'answers': answers, })
 

@@ -14,8 +14,6 @@ def view(request, space_id, id):
     quiz = get_object_or_404(Quiz, pk=id)
     answers = Answer.objects.filter(quiz__id = id)
     has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(space_id)
-    has_user_upvoted = request.user in quiz.upvoters.all()
-    has_user_downvoted = request.user in quiz.downvoters.all()
 
     is_user_answer_correct = False
 
@@ -30,8 +28,6 @@ def view(request, space_id, id):
         'quiz': quiz,
         'user': request.user,
         'has_user_joined':has_user_joined,
-        'has_user_upvoted': has_user_upvoted,
-        'has_user_downvoted': has_user_downvoted,
         'answers': answers,
         'attempted_answer_id': int(request.POST.get('attempted_answer_id', 0)),
         'is_user_answer_correct': is_user_answer_correct })

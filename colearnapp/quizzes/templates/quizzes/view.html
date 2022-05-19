@@ -37,7 +37,7 @@
         </p>
         <p class="text-center">
             <a href="{% url 'quizzes:upvote' space.id quiz.id %}" title="Upvote"><i class="bi-caret-up-fill
-                {% if has_user_upvoted %}
+                {% if request.user in question.upvoters.all %}
                 text-success
                 {% else %}
                 text-secondary
@@ -51,7 +51,7 @@
             {% endif %}
             ">{{ quiz.score }}</span> 
             <a href="{% url 'quizzes:downvote' space.id quiz.id %}" title="Downvote"><i class="bi-caret-down-fill 
-                {% if has_user_downvoted %}
+                {% if request.user in question.downvoters.all %}
                 text-danger
                 {% else %}
                 text-secondary
