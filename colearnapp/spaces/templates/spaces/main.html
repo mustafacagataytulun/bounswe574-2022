@@ -68,7 +68,7 @@
         </div>
         <div class="col-1 text-end">
           {% if has_user_joined %}
-          <a href="#" class="btn btn-primary">Edit</a>
+          <a href="{% url 'spaces:save_main_page' space.id %}" class="btn btn-primary">Edit</a>
           {% else %}
           <span title="You must join this Colearning Space to edit the main page." data-bs-toggle="tooltip">
             <button type="submit" class="btn btn-secondary" disabled>Edit</button>

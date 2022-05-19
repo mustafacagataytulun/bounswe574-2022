@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Space
+from .models import MainPage, Space
 
 class SpaceCreateForm(forms.ModelForm):
     cover_image = forms.FileField(label="Cover Image", required=True)
@@ -11,3 +11,8 @@ class SpaceCreateForm(forms.ModelForm):
         help_texts = {
             'tags': 'Separate tags with commas.',
         }
+
+class MainPageSaveForm(forms.ModelForm):
+    class Meta:
+        model = MainPage
+        fields = ('content',)

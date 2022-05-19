@@ -9,7 +9,7 @@ from glossary.models import GlossaryItem
 from questions.models import Question
 from quizzes.models import Quiz
 
-from .forms import SpaceCreateForm
+from .forms import MainPageSaveForm, SpaceCreateForm
 from .models import MainPage, Space
 
 #pylint: disable=W0223
@@ -62,6 +62,30 @@ def main(request, id):
         'main_page':main_page,
         'has_user_joined':has_user_joined,
         'joined_users':joined_users,})
+
+def save_main_page(request, id):
+    has_user_joined = request.user.has_joined_to_space(id)
+
+    if not has_user_joined:
+        return redirect('spaces:main', space_id=id)
+
+    space = get_object_or_404(Space, pk=id)
+
+    if hasattr(space, 'main_page'):
+        main_page = get_object_or_404(MainPage, space_id=space.id)
+    else:
+        main_page = MainPage()
+
+    form = MainPageSaveForm(request.POST or None, instance=main_page)
+
+    if request.method == "POST" and form.is_valid():
+        main_page = form.save(commit=False)
+        main_page.space = space
+        main_page.save()
+
+        return redirect('spaces:main', id=id)
+
+    return render(request, 'spaces/main_page_save_form.html', {'form': form, 'space': space})
 
 def articles(request, id):
     space = Space.objects.get(pk=id)
