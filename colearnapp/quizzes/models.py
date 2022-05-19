@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
-from colearnapp.base_models import TaggableEntity
 from spaces.models import Space
+from colearnapp.base_models import TaggableEntity
 
 class Quiz(TaggableEntity):
     question = models.CharField(max_length=500)
