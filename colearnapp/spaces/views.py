@@ -10,7 +10,7 @@ from questions.models import Question
 from quizzes.models import Quiz
 
 from .forms import SpaceCreateForm
-from .models import Space
+from .models import MainPage, Space
 
 #pylint: disable=W0223
 class SpaceCoversStorage(S3Boto3Storage):
@@ -29,6 +29,10 @@ def create(request):
             space.subscribed_users.add(request.user)
             space.save()
 
+            main_page = MainPage(content='### Welcome to ' + space.name + ' colearning space!\n\nThis is the welcoming page of this space.\n\nYou can edit it however you like to describe this colearning space, or give your new colearners a direction for where to start. You can use **Markdown** for styling. *Yay!*')
+            main_page.space = space
+            main_page.save()
+
             cover_image = request.FILES['cover_image']
             cover_image_extension = os.path.splitext(str(cover_image))[1]
             storage = SpaceCoversStorage()
@@ -44,6 +48,18 @@ def create(request):
 @login_required
 def create_success(request, id):
     return render(request, 'spaces/create_done.html', {'id':id})
+
+def main(request, id):
+    space = Space.objects.get(pk=id)
+    main_page = MainPage.objects.get(space_id=space.id)
+    has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(id)
+    joined_users = space.subscribed_users.all()
+
+    return render(request, 'spaces/main.html', {
+        'space':space,
+        'main_page':main_page,
+        'has_user_joined':has_user_joined,
+        'joined_users':joined_users,})
 
 def articles(request, id):
     space = Space.objects.get(pk=id)
