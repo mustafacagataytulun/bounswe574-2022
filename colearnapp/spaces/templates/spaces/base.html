@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-auto px-4">
+      <div class="my-5">
+        <img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" class="space-cover-image" />
+      </div>
+    
+      {% include 'spaces/partial/colearners.html' %}
+    </div>
+    <div class="col">
+        {% include 'spaces/partial/lead.html' %}
+
+        {% include 'spaces/partial/navigation.html' with active_tab=request.resolver_match.url_name %}
+
+        <div class="row my-2">
+            {% block space_content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

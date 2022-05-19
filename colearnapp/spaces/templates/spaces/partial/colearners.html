@@ -1,0 +1,12 @@
+<div>
+    <h3>Colearners</h3>
+    {% if joined_users.count > 0 %}
+    <ul class="list-group list-group-flush">
+        {% for user in joined_users %}
+        <a href="{% url 'profiles:view' user.id %}" class="list-group-item list-group-item-action">{{ user.username }}</a>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>There is no colearner joined to this space.</p>
+    {% endif %}
+</div>

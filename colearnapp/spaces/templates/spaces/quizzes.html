@@ -1,93 +1,33 @@
-{% extends 'base.html' %}
-{% load django_bootstrap5 %}
+{% extends 'spaces/base.html' %}
+{% load markdownify %}
 
-{% block content %}
-<div class="row">
-    <div class="col-md-auto px-4">
-      <div class="my-5">
-        <img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" class="space-cover-image" />
-      </div>
-      <div class="">
-        <h3>Colearners</h3>
-        {% if joined_users.count > 0 %}
-        <ul class="list-group list-group-flush">
-          {% for user in joined_users %}
-          <a href="{% url 'profiles:view' user.id %}" class="list-group-item list-group-item-action">{{ user.username }}</a>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p>There is no colearner joined to this space.</p>
-        {% endif %}
-      </div>
-    </div>
-    <div class="col">
-      <div class="row my-5">
-        <div class="col-10 text-center">
-          <h1>{{ space.name }}</h1>
-          {% for tag in space.get_tag_list %}
-          <span class="badge bg-info">{{ tag }}</span>
-          {% endfor %}
-        </div>
-        <div class="col-2 text-end">
-          {% if has_user_joined %}
-          <form method="post" action="{% url 'spaces:leave' space.id %}">
-            {% csrf_token %}
-            {% bootstrap_button button_type="submit" content="Leave" button_class="btn-secondary" %}
-          </form>
-          {% else %}
-          <form method="post" action="{% url 'spaces:join' space.id %}">
-            {% csrf_token %}
-            {% bootstrap_button button_type="submit" content="Join" %}
-          </form>
-          {% endif %}
-        </div>
-      </div>
-      <div class="row">
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'spaces:articles' space.id %}">Articles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'spaces:questions' space.id %}">Questions</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'spaces:quizzes' space.id %}">Quizzes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'spaces:glossary' space.id %}">Glossary</a>
-          </li>
-        </ul>
-      </div>
-      <div class="row my-2">
-        <div class="col-10">
-          {% if quizzes.count > 0 %}
-          <ul class="list-group list-group-flush">
-            {% for quiz in quizzes %}
-            <a href="{% url 'quizzes:view' space.id quiz.id %}" class="list-group-item list-group-item-action">{{ quiz.question }} 
-              <span class="badge 
-              {% if quiz.score >= 0 %}
-              bg-success
-              {% else %}
-              bg-danger
-              {% endif %}
-              ">{{ quiz.score }}</span>
-            </a>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p>There is no quiz in this space, yet. Why don't you create one?</p>
-          {% endif %}
-        </div>
-        <div class="col-2 text-end">
-          {% if has_user_joined %}
-          <a href="{% url 'quizzes:create' space.id %}" class="btn btn-primary">New Quiz</a>
-          {% else %}
-          <span title="You must join this Colearning Space to create quizzes." data-bs-toggle="tooltip">
-            <button type="submit" class="btn btn-secondary" disabled>New Quiz</button>
-          </span>
-          {% endif %}
-        </div>
-      </div>
-    </div>
+{% block space_content %}
+<div class="col-10">
+  {% if quizzes.count > 0 %}
+  <ul class="list-group list-group-flush">
+    {% for quiz in quizzes %}
+    <a href="{% url 'quizzes:view' space.id quiz.id %}" class="list-group-item list-group-item-action">{{ quiz.question }} 
+      <span class="badge 
+      {% if quiz.score >= 0 %}
+      bg-success
+      {% else %}
+      bg-danger
+      {% endif %}
+      ">{{ quiz.score }}</span>
+    </a>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>There is no quiz in this space, yet. Why don't you create one?</p>
+  {% endif %}
+</div>
+<div class="col-2 text-end">
+  {% if has_user_joined %}
+  <a href="{% url 'quizzes:create' space.id %}" class="btn btn-primary">New Quiz</a>
+  {% else %}
+  <span title="You must join this Colearning Space to create quizzes." data-bs-toggle="tooltip">
+    <button type="submit" class="btn btn-secondary" disabled>New Quiz</button>
+  </span>
+  {% endif %}
 </div>
 {% endblock %}
