@@ -29,7 +29,9 @@ def create(request):
             space.subscribed_users.add(request.user)
             space.save()
 
-            main_page = MainPage(content='### Welcome to ' + space.name + ' colearning space!\n\nThis is the welcoming page of this space.\n\nYou can edit it however you like to describe this colearning space, or give your new colearners a direction for where to start. You can use **Markdown** for styling. *Yay!*')
+            main_page = MainPage(content='### Welcome to ' + space.name + ' colearning space!\n\n' +
+                'This is the welcoming page of this space.\n\nYou can edit it however you like to describe this colearning space, ' +
+                'or give your new colearners a direction for where to start. You can use **Markdown** for styling. *Yay!*')
             main_page.space = space
             main_page.save()
 
