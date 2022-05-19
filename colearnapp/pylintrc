@@ -14,3 +14,6 @@ max-line-length=240
 
 [MASTER]
 ignore=migrations
+
+[SIMILARITIES]
+ignore-imports=yes
