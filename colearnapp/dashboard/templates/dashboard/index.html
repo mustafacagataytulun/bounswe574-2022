@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
 {% load static %}
 
 {% block content %}
@@ -41,18 +42,34 @@
 
 <div class="px-4 my-5 text-center">
     <h1>Browse Colearning Spaces</h1>
+    <form method="get">
+        <div class="row d-flex justify-content-center">
+            <div class="col-4">
+                {% bootstrap_form form %}
+            </div>
+        </div>
+    </form>
 </div>
 <div class="mt-5 spaces-container">
     {% if all_spaces %}
-    <ul>
-        {% for space in all_spaces %}
-        <li>
-            <a href="{% url 'spaces:view' space.id %}"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+        {% if is_searched %}
+        <p class="text-center">Showing colearning spaces related with '{{ form.cleaned_data.search }}'.</p>
+        {% endif %}
+        <ul>
+            {% for space in all_spaces %}
+            <li>
+                <a href="{% url 'spaces:view' space.id %}"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
     {% else %}
-    <p class="text-center">No space has been created, yet.</p>
+    <p class="text-center">
+        {% if is_searched %}
+        There is no colearning space related with '{{ form.cleaned_data.search }}'.
+        {% else %}
+        No space has been created, yet.
+        {% endif %}
+    </p>
         {% if user.is_authenticated %}
         <p class="text-center">Why don't you <a href="{% url 'spaces:create' %}">create a new one</a>?</p>
         {% endif %}
