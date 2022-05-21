@@ -21,7 +21,7 @@
 </div>
 <div class="mt-5 spaces-container">
     {% if own_spaces %}
-    <ul>
+    <ul class="spaces-list">
         {% for space in own_spaces %}
         <li>
             <a href="{% url 'spaces:view' space.id %}"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
@@ -51,17 +51,37 @@
     </form>
 </div>
 <div class="mt-5 spaces-container">
-    {% if all_spaces %}
+    {% if page.object_list.count > 0 %}
         {% if is_searched %}
         <p class="text-center">Showing colearning spaces related with '{{ form.cleaned_data.search }}'.</p>
         {% endif %}
-        <ul>
-            {% for space in all_spaces %}
+        <ul class="spaces-list">
+            {% for space in page %}
             <li>
                 <a href="{% url 'spaces:view' space.id %}"><img src="https://colearnapp-space-covers.s3.eu-west-1.amazonaws.com/{{ space.id }}.jpg" alt="{{ space.name }}" /><br />{{ space.name }}</a>
             </li>
             {% endfor %}
         </ul>
+        <div class="clearfix"></div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item{% if page.number == 1 %} disabled{% endif %}">
+                    <a class="page-link" href="{% url 'dashboard:index' %}?page={{ page.number|add:'-1' }}{% if is_searched %}&search={{ form.cleaned_data.search }}{% endif %}" aria-label="Previous"{% if page.number == 1 %} tabindex="-1" aria-disabled="true"{% endif %}>
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% for page_number in page.paginator.page_range %}
+                <li class="page-item{% if page.number == page_number %} active{% endif %}">
+                    <a class="page-link" href="{% url 'dashboard:index' %}?page={{ page_number }}{% if is_searched %}&search={{ form.cleaned_data.search }}{% endif %}">{{ page_number }}</a>
+                </li>
+                {% endfor %}
+                <li class="page-item{% if page.number == page.paginator.num_pages %} disabled{% endif %}">
+                    <a class="page-link" href="{% url 'dashboard:index' %}?page={{ page.number|add:'1' }}{% if is_searched %}&search={{ form.cleaned_data.search }}{% endif %}" aria-label="Next"{% if page.number == page.paginator.num_pages %} tabindex="-1" aria-disabled="true"{% endif %}>
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     {% else %}
     <p class="text-center">
         {% if is_searched %}
