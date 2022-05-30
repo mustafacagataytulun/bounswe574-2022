@@ -10,7 +10,7 @@ def index(request):
     own_spaces = None
 
     if request.user.is_authenticated:
-        own_spaces = Space.objects.filter(created_by=request.user).order_by('-id')
+        own_spaces = Space.objects.filter(subscribed_users=request.user).order_by('-id')
 
     form = SpaceSearchForm(request.GET or None)
     is_searched = form.is_valid() and len(form.cleaned_data['search'])
