@@ -6,6 +6,10 @@
 <div class="row mt-5">
     <div class="col-md-auto me-5">
         <img src="https://colearnapp-profile-pictures.s3.eu-west-1.amazonaws.com/{{ user.id }}.jpg" alt="Profile picture of {{ user.username }}" class="profile-image" onerror="this.src='{% static 'profiles/profile-picture-placeholder.png' %}';" />
+        <br />
+        {% if user.id == request.user.id %}
+        <a href="{% url 'profiles:edit' %}" class="btn btn-secondary">Edit Profile</a>
+        {% endif %}
     </div>
     <div class="col">
         <h1 class="h2">{{ user.username }}</h1>
