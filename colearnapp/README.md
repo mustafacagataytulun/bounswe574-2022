@@ -31,4 +31,11 @@ The application is hosted on [https://colearnapp.mustafatulun.com](https://colea
 This application uses following assets:
 
 - [Bootstrap Starter Template](https://startbootstrap.com/template/bare) under [MIT License](https://github.com/startbootstrap/startbootstrap-bare/blob/master/LICENSE)
-- [Profile avatar placeholder large](https://commons.wikimedia.org/wiki/File:Profile_avatar_placeholder_large.png) under [BSD License](Google, Chromium project, BSD <http://opensource.org/licenses/bsd-license.php>, via Wikimedia Commons)
+- [Profile avatar placeholder large](https://commons.wikimedia.org/wiki/File:Profile_avatar_placeholder_large.png) under [BSD License](http://opensource.org/licenses/bsd-license.php)
+
+This application uses following libraries:
+
+- [django-bootstrap5](https://github.com/zostera/django-bootstrap5) under [BSD 3-Clause License](https://github.com/zostera/django-bootstrap5/blob/main/LICENSE)
+- [Django Markdownify](https://github.com/erwinmatijsen/django-markdownify) under [MIT License](https://github.com/erwinmatijsen/django-markdownify/blob/master/LICENSE)
+- [django storages](https://github.com/jschneier/django-storages) under [BSD 3-Clause License](https://github.com/jschneier/django-storages/blob/master/LICENSE)
+- [Psycopg](https://www.psycopg.org/) under [GNU Lesser General Public License](https://github.com/psycopg/psycopg2/blob/master/LICENSE)
