@@ -24,7 +24,11 @@ The application uses CircleCI as a CI/CD tool. It is currently in progress.
 
 [https://app.circleci.com/pipelines/github/mustafacagataytulun/bounswe573-2022](https://app.circleci.com/pipelines/github/mustafacagataytulun/bounswe573-2022)
 
+## Deployment
+The application is hosted on [https://colearnapp.mustafatulun.com](https://colearnapp.mustafatulun.com).
+
 ## Attributions
 This application uses following assets:
 
+- [Bootstrap Starter Template](https://startbootstrap.com/template/bare) under [MIT License](https://github.com/startbootstrap/startbootstrap-bare/blob/master/LICENSE)
 - [Profile avatar placeholder large](https://commons.wikimedia.org/wiki/File:Profile_avatar_placeholder_large.png) under [BSD License](Google, Chromium project, BSD <http://opensource.org/licenses/bsd-license.php>, via Wikimedia Commons)
