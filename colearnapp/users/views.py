@@ -13,7 +13,7 @@ def register(request):
             user = form.save()
             login(request, user)
 
-            return HttpResponseRedirect(reverse('users:register_success'))
+            return HttpResponseRedirect(reverse('register_success'))
 
     else:
         form = CustomUserCreationForm()

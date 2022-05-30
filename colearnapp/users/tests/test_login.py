@@ -9,7 +9,7 @@ class LoginViewTests(TestCase):
         """
         Login form should contain necessary inputs.
         """
-        response = self.client.get(reverse('users:login'))
+        response = self.client.get(reverse('login'))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<form method="post">')
@@ -32,7 +32,7 @@ class LoginViewTests(TestCase):
         user = auth.get_user(self.client)
         self.assertFalse(user.is_authenticated)
 
-        response = self.client.post(reverse('users:login'), data={'username':email, 'password': password})
+        response = self.client.post(reverse('login'), data={'username':email, 'password': password})
         user = auth.get_user(self.client)
 
         self.assertEqual(response.status_code, 302)
@@ -50,7 +50,7 @@ class LoginViewTests(TestCase):
         interests = "example interests"
         ColearnAppUser.objects.create_user(email=email, username=username, password=password, interests=interests)
 
-        response = self.client.post(reverse('users:login'), data={'username':email, 'password': invalid_password})
+        response = self.client.post(reverse('login'), data={'username':email, 'password': invalid_password})
         user = auth.get_user(self.client)
 
         self.assertEqual(response.status_code, 200)

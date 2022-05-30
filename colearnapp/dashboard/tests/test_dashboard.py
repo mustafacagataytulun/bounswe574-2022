@@ -21,7 +21,7 @@ class DashboardViewTests(TestCase):
         password = "y$T&P!NAPL$wu8hX"
         interests = "example interests"
         ColearnAppUser.objects.create_user(email=email, username=username, password=password, interests=interests)
-        self.client.post(reverse('users:login'), data={'username':email, 'password': password})
+        self.client.post(reverse('login'), data={'username':email, 'password': password})
         response = self.client.get(reverse('dashboard:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Your Spaces')
