@@ -4,7 +4,7 @@ beautifulsoup4==4.11.1
 bleach==4.1.0
 boto3==1.22.10
 botocore==1.25.10
-Django==4.0.4
+Django==4.0.6
 django-bootstrap5==21.3
 django-markdownify==0.9.1
 django-storages==1.12.3
