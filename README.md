@@ -2,7 +2,7 @@
 This repository contains work of group 4 on team assignments and homeworks of _SWE574 - Software Development as a Team_ course in Boğaziçi University. This repository has been started as a copy of [mustafacagataytulun/bounswe573-2022](https://github.com/mustafacagataytulun/bounswe573-2022) repository. We will make our collective contributions to make it a final product.
 
 ## Contributions
-Since this is a strict group project for a university course, contributions are only allowed from group members. Nevertheless, you can see our [contributing guideline](https://github.com/mustafacagataytulun/bounswe574-2022/CONTRIBUTING.md).
+Since this is a strict group project for a university course, contributions are only allowed from group members. Nevertheless, you can see our [contributing guideline](https://github.com/mustafacagataytulun/bounswe574-2022/blob/main/CONTRIBUTING.md).
 
 ## Code of Conduct
 This repository consist of our own work. For the parts that is not possible (external libraries, etc.), we will attribute to corresponding resources.
