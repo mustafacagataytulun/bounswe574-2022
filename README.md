@@ -16,17 +16,7 @@ A web application written in [Python](https://www.python.org/) by using [Django]
 This web application is a group project for SWE 574 course in Boğaziçi University. It allows people to create colearning spaces and share knowledge.
 
 ## Development
-Required Python package information is provided in _requirements.txt_ file. So, you can install dependencies like this:
-
-```bash
-pip install -r requirements.txt
-```
-
-After that, the application can be run on development server like this:
-
-```bash
-python manage.py runserver
-```
+A step-by-step guide to configure the computer for local development is available on our [Wiki](https://github.com/mustafacagataytulun/bounswe574-2022/wiki/Configuration-for-Local-Development).
 
 ## CI/CD
 The application uses CircleCI as a CI/CD tool. It is currently in progress.
