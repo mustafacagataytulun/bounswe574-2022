@@ -1,7 +1,7 @@
 asgiref==3.5.0
 astroid==2.11.2
 attrs==21.4.0
-backports.zoneinfo==0.2.1
+backports.zoneinfo==0.2.1;python_version<"3.9"
 beautifulsoup4==4.11.1
 bleach==4.1.0
 boto3==1.22.10
