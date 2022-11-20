@@ -21,6 +21,8 @@ function displayAnnotationForm(x, y) {
         annotationForm.style.left = x + 'px';
         annotationForm.style.top = y + 'px';
         annotationForm.style.display = 'block';
+        let closeBtn = document.getElementById("annotation-form-close-btn");
+        closeBtn.addEventListener("click", removeAnnotationForm);
     }
 }
 
@@ -59,11 +61,9 @@ function checkSelection(event) {
             displayButton(event.clientX, event.clientY)
         } else {
             removeButton();
-            removeAnnotationForm();
         }
     } else {
         removeButton();
-        removeAnnotationForm();
     }
 }
 
