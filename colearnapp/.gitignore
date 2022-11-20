@@ -166,4 +166,7 @@ cython_debug/
 # PostgreSQL
 .pgpass
 
+# Idea
+.idea
+
 # End of https://www.toptal.com/developers/gitignore/api/django
