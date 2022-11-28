@@ -8,5 +8,5 @@ class MediaType:
         if content_type != 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"':
             raise HTTPException(
                 status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-                'Content type must be application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"',
+                "Content type must be 'application/ld+json; profile=\"http://www.w3.org/ns/anno.jsonld\"'.",
             )
