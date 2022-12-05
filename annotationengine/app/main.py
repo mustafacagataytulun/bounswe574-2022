@@ -7,6 +7,8 @@ from app.json_ld_utilities import JsonLdResponse
 from app.media_type import MediaType
 from app.web_annotation_data_model import WebAnnotationDataModel
 
+PER_PAGE: int = 10
+
 app = FastAPI(title="Annotations API")
 
 @app.get("/{collection_id}/",
@@ -18,38 +20,60 @@ def get_annotations(collection_id: str, page: int = None):
     annotations_db_collection = db[collection_id]
     total_count = annotations_db_collection.count_documents({})
 
+    skip = 0
+
+    if page is not None:
+        skip = page * PER_PAGE
+
+    items = []
+    cursor = annotations_db_collection.find(skip=skip, limit=PER_PAGE)
+
+    for annotation in cursor:
+        items.append({
+            "id": os.getenv('BASE_URL') + collection_id + '/' + str(annotation['_id']),
+            "type": "Annotation",
+            "body": annotation['body'],
+            "target": annotation['target'],
+        })
+
     if page is None:
-        items = []
-        cursor = annotations_db_collection.find(skip=0, limit=10)
-
-        for annotation in cursor:
-            items.append({
-                "id": os.getenv('BASE_URL') + collection_id + '/' + str(annotation['_id']),
-                "type": "Annotation",
-                "body": annotation['body'],
-                "target": annotation['target'],
-            })
-
         response_model = {
-                "@context": [
-                    "http://www.w3.org/ns/anno.jsonld",
-                    "http://www.w3.org/ns/ldp.jsonld"
-                    ],
-                "id": os.getenv('BASE_URL') + collection_id + '/',
-                "type": ["BasicContainer", "AnnotationCollection"],
-                "total": total_count,
-                "first": {
-                    "id": os.getenv('BASE_URL') + collection_id + '/?page=0',
-                    "type": "AnnotationPage",
-                }
-                    }
-        
-        if total_count > 10:
+            "@context": [
+                "http://www.w3.org/ns/anno.jsonld",
+                "http://www.w3.org/ns/ldp.jsonld"
+                ],
+            "id": os.getenv('BASE_URL') + collection_id + '/',
+            "type": ["BasicContainer", "AnnotationCollection"],
+            "total": total_count,
+            "first": {
+                "id": os.getenv('BASE_URL') + collection_id + '/?page=0',
+                "type": "AnnotationPage",
+            }
+        }
+
+        if total_count > PER_PAGE:
             response_model['first']['next'] = os.getenv('BASE_URL') + collection_id + '/?page=1'
 
         response_model['first']['items'] = items
-        response_model['last'] = os.getenv('BASE_URL') + collection_id + '/?page=' + str(int((total_count - 1) / 10))
-    
+        response_model['last'] = os.getenv('BASE_URL') + collection_id + '/?page=' + str(get_last_page_index(total_count))
+    else:
+        response_model = {
+            "@context": "http://www.w3.org/ns/anno.jsonld",
+            "id": os.getenv('BASE_URL') + collection_id + '/?page=' + str(page),
+            "type": "AnnotationPage",
+            "partOf": {
+                "id": os.getenv('BASE_URL') + collection_id + '/',
+                "total": total_count,
+            },
+            "startIndex": page * PER_PAGE,
+            "items": items,
+        }
+
+        if page < get_last_page_index(total_count):
+            response_model['next'] = os.getenv('BASE_URL') + collection_id + '/?page=' + str(page + 1)
+
+        if page > 0:
+            response_model['prev'] = os.getenv('BASE_URL') + collection_id + '/?page=0'
 
     return response_model
 
@@ -75,3 +99,6 @@ async def post_annotation(collection_id: str, request: Request, response: Respon
     response.headers['Location'] = incoming_request['id']
 
     return incoming_request
+
+def get_last_page_index(total_item_count: int):
+    return int((total_item_count - 1) / PER_PAGE)
