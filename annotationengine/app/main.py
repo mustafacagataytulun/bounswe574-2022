@@ -15,7 +15,7 @@ app = FastAPI(title="Annotations API")
     response_class=JsonLdResponse,
     dependencies=[Depends(MediaType.application_ld_json)])
 def get_annotations(collection_id: str, page: int = None):
-    client = MongoClient('mongodb://' + os.getenv('DB_USER') + ':' + os.getenv('DB_PASSWORD') + '@' + os.getenv('DB_HOST') + ':' + os.getenv('DB_PORT') + '/')
+    client = MongoClient(os.getenv('DB_CONNECTION_STRING'))
     db = client[os.getenv('DB_NAME')]
     annotations_db_collection = db[collection_id]
     total_count = annotations_db_collection.count_documents({})
@@ -87,7 +87,7 @@ def get_annotations(collection_id: str, page: int = None):
 async def post_annotation(collection_id: str, request: Request, response: Response):
     incoming_request = await request.json()
     incoming_request['created'] = datetime.utcnow().isoformat()
-    client = MongoClient('mongodb://' + os.getenv('DB_USER') + ':' + os.getenv('DB_PASSWORD') + '@' + os.getenv('DB_HOST') + ':' + os.getenv('DB_PORT') + '/')
+    client = MongoClient(os.getenv('DB_CONNECTION_STRING'))
     db = client[os.getenv('DB_NAME')]
     annotations_db_collection = db[collection_id]
     annotations_db_collection.insert_one(incoming_request)
