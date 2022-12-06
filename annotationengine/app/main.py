@@ -29,12 +29,10 @@ def get_annotations(collection_id: str, page: int = None):
     cursor = annotations_db_collection.find(skip=skip, limit=PER_PAGE)
 
     for annotation in cursor:
-        items.append({
-            "id": os.getenv('BASE_URL') + collection_id + '/' + str(annotation['_id']),
-            "type": "Annotation",
-            "body": annotation['body'],
-            "target": annotation['target'],
-        })
+        id = annotation.pop('_id')
+        annotation.pop('@context')
+        annotation['id'] = os.getenv('BASE_URL') + collection_id + '/' + str(id)
+        items.append(annotation)
 
     if page is None:
         response_model = {
