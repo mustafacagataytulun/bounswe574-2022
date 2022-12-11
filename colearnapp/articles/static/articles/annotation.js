@@ -93,7 +93,8 @@ function storeAnnotation(payload) {
 function extractURLPath() {
     let url = window.location.href.toString()
     let index = getPosition(url, "/", 3)
-    return url.slice(index + 1, url.length)
+    let path = url.slice(index + 1, url.length)
+    return path.replaceAll("/", "-")
 }
 
 function getPosition(string, subString, index) {
@@ -170,7 +171,7 @@ function displayAnnotationForm(x, y) {
     let annotationForm = document.getElementById("annotation-form");
     if (annotationForm.style.display === 'none' || annotationForm.style.display === '') {
         annotationForm.style.left = x + 'px';
-        annotationForm.style.top = -380 + y + 'px';
+        annotationForm.style.top = -180 + y + 'px';
         annotationForm.style.display = 'block';
 
         let closeBtn = document.getElementById("annotation-form-close-btn");
