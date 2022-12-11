@@ -9,10 +9,11 @@ from spaces.models import Space
 from .forms import ArticleSaveForm, CommentSaveForm
 from .models import Article, Comment
 
+
 def view(request, space_id, id):
     space = get_object_or_404(Space, pk=space_id)
     article = get_object_or_404(Article, pk=id)
-    comments = Comment.objects.filter(article__id = id)
+    comments = Comment.objects.filter(article__id=id)
     has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(space_id)
     form = CommentSaveForm()
 
@@ -20,9 +21,10 @@ def view(request, space_id, id):
         'space': space,
         'article': article,
         'user': request.user,
-        'has_user_joined':has_user_joined,
+        'has_user_joined': has_user_joined,
         'form': form,
         'comments': comments, })
+
 
 @login_required
 def save_comment(request, space_id, id):
@@ -44,6 +46,7 @@ def save_comment(request, space_id, id):
         comment.save()
 
     return redirect('articles:view', space_id=space_id, id=id)
+
 
 @login_required
 def save(request, space_id, id=None):
@@ -77,9 +80,11 @@ def save(request, space_id, id=None):
 
     return render(request, 'articles/save_form.html', {'form': form, 'space': space})
 
+
 @login_required
 def save_success(request, space_id, id):
     return render(request, 'articles/save_success.html', {'space_id': space_id, 'id': id})
+
 
 @login_required
 def upvote(request, space_id, id):
@@ -104,6 +109,7 @@ def upvote(request, space_id, id):
 
     return redirect('articles:view', space_id=space.id, id=article.id)
 
+
 @login_required
 def downvote(request, space_id, id):
     space = get_object_or_404(Space, pk=space_id)
@@ -126,3 +132,15 @@ def downvote(request, space_id, id):
         Article.objects.filter(pk=id).update(score=F('score') + 1)
 
     return redirect('articles:view', space_id=space.id, id=article.id)
+
+
+@login_required
+def save_annotation(request, space_id, id):
+    has_user_joined = request.user.has_joined_to_space(space_id)
+
+    if not has_user_joined:
+        return redirect('articles:view', space_id=space_id, id=id)
+
+    article = get_object_or_404(Article, pk=id)
+
+    return redirect('articles:view', space_id=space_id, id=article.id)

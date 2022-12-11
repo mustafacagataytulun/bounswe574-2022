@@ -1,10 +1,10 @@
 from django.urls import path
 
-from .views import downvote, save, save_comment, save_success, upvote, view
+from .views import downvote, save, save_comment, save_success, upvote, view, save_annotation
 
 app_name = 'articles'
 
-#pylint: disable=R0801
+# pylint: disable=R0801
 urlpatterns = [
     path('<int:id>', view, name='view'),
     path('create', save, name='create'),
@@ -13,4 +13,5 @@ urlpatterns = [
     path('<int:id>/upvote', upvote, name='upvote'),
     path('<int:id>/downvote', downvote, name='downvote'),
     path('<int:id>/save_comment', save_comment, name='save_comment'),
+    path('<int:id>/save_annotation', save_annotation, name='save_annotation'),
 ]
