@@ -67,7 +67,7 @@ function onFormAddBtnClick(event) {
 
 function storeAnnotation(payload) {
     let xhr = new XMLHttpRequest()
-    let url = annotationServiceURL + extractURLPath()
+    let url = annotationServiceURL + extractURLPath() + "/"
 
     log('storeAnnotation url:' + url)
 
