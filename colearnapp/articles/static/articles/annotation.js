@@ -73,7 +73,7 @@ function storeAnnotation(payload) {
 
     xhr.open("POST", url)
     xhr.setRequestHeader('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
-    xhr.send(payload)
+    xhr.send(JSON.stringify(payload))
 
     xhr.onload = () => {
         log('storeAnnotation status:' + xhr.status)
