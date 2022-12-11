@@ -19,7 +19,7 @@ function displayAnnotationForm(x, y) {
     let annotationForm = document.getElementById("annotation-form");
     if (annotationForm.style.display === 'none' || annotationForm.style.display === '') {
         annotationForm.style.left = x + 'px';
-        annotationForm.style.top = y + 'px';
+        annotationForm.style.top = -380 + y + 'px';
         annotationForm.style.display = 'block';
         let closeBtn = document.getElementById("annotation-form-close-btn");
         closeBtn.addEventListener("click", removeAnnotationForm);
