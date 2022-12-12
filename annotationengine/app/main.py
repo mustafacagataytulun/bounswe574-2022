@@ -1,7 +1,9 @@
 import os
 
 from datetime import datetime
+from bson import ObjectId
 from fastapi import FastAPI, Request, Response, status, Depends
+from fastapi.responses import JSONResponse
 from pymongo import MongoClient
 from app.json_ld_utilities import JsonLdResponse
 from app.media_type import MediaType
@@ -97,6 +99,23 @@ async def post_annotation(collection_id: str, request: Request, response: Respon
     response.headers['Location'] = incoming_request['id']
 
     return incoming_request
+
+@app.delete("/{collection_id}/{annotation_id}",
+    status_code=status.HTTP_204_NO_CONTENT)
+async def delete_annotation(collection_id: str, annotation_id: str):
+    client = MongoClient(os.getenv('DB_CONNECTION_STRING'))
+    db = client[os.getenv('DB_NAME')]
+    collection_list = db.list_collection_names()
+
+    if collection_id not in collection_list:
+        return JSONResponse({"message":"The collection does not exist."}, status_code=404)
+
+    annotations_db_collection = db.get_collection(collection_id)
+
+    deleted_annotation = annotations_db_collection.find_one_and_delete({'_id': ObjectId(annotation_id)})
+
+    if deleted_annotation is None:
+        return JSONResponse({"message":"The annotation does not exist."}, status_code=404)
 
 def get_last_page_index(total_item_count: int):
     return int((total_item_count - 1) / PER_PAGE)
