@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from bson import ObjectId
 from fastapi import FastAPI, Request, Response, status, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pymongo import MongoClient
 from app.json_ld_utilities import JsonLdResponse
@@ -12,6 +13,23 @@ from app.web_annotation_data_model import WebAnnotationDataModel
 PER_PAGE: int = 10
 
 app = FastAPI(title="Annotations API")
+
+origins = [
+    "https://colearnapp.mustafatulun.com",
+    "http://localhost",
+    "https://localhost",
+    "http://localhost:8000",
+    "https://localhost:8000",
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials = True,
+    allow_methods = ["*"],
+    allow_headers = ["*"],
+)
 
 @app.get("/{collection_id}/",
     response_class=JsonLdResponse,
