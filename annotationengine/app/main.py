@@ -34,19 +34,27 @@ app.add_middleware(
 @app.get("/{collection_id}/",
     response_class=JsonLdResponse,
     dependencies=[Depends(MediaType.application_ld_json)])
-def get_annotations(collection_id: str, page: int = None):
+def get_annotations(collection_id: str, page: int = None, target: str = None, creator: str = None):
     client = MongoClient(os.getenv('DB_CONNECTION_STRING'))
     db = client[os.getenv('DB_NAME')]
     annotations_db_collection = db[collection_id]
-    total_count = annotations_db_collection.count_documents({})
 
     skip = 0
 
     if page is not None:
         skip = page * PER_PAGE
 
+    query_filter = {}
+
+    if target is not None and len(target) > 0:
+        query_filter = {"$or":[{"target": target}, {"target.id": target}, {"target.source": target}]}
+
+    if creator is not None and len(creator) > 0:
+        query_filter = query_filter and {"$or":[{"creator": creator}, {"creator.id": creator}]}
+
+    total_count = annotations_db_collection.count_documents(query_filter)
     items = []
-    cursor = annotations_db_collection.find(skip=skip, limit=PER_PAGE)
+    cursor = annotations_db_collection.find(query_filter, skip=skip, limit=PER_PAGE)
 
     for annotation in cursor:
         id = annotation.pop('_id')
