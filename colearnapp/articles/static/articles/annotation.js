@@ -17,10 +17,9 @@ let selection = null
 function onFormAddBtnClick(event) {
     event.stopPropagation();
 
-    let inputTitle = document.getElementById("annotation-form-input-title");
     let inputMessage = document.getElementById("annotation-form-input-message");
 
-    let isValid = validateInputs(inputTitle, inputMessage)
+    let isValid = validateInputs(inputMessage)
     if (!isValid) {
         return
     }
@@ -36,17 +35,12 @@ function onFormAddBtnClick(event) {
     let prefix = findPrefix(selectedText, articleContent);
     let suffix = findSuffix(selectedText, articleContent);
 
-    let value = {
-        "title": inputTitle.value,
-        "message": inputMessage.value
-    }
-
     let payload = {
         "@context": "http://www.w3.org/ns/anno.jsonld",
         "type": "Annotation",
         "body": {
             "type": "TextualBody",
-            "value": JSON.stringify(value),
+            "value": inputMessage.value,
             "format": "application/json",
             "language": "en"
         },
@@ -101,18 +95,12 @@ function getPosition(string, subString, index) {
     return string.split(subString, index).join(subString).length;
 }
 
-function validateInputs(inputTitle, inputMessage) {
-    let valid = true
-    if (inputTitle.value.length === 0) {
-        inputTitle.classList.add("annotation-form-input-warning")
-        valid = false
-    }
+function validateInputs(inputMessage) {
     if (inputMessage.value.length === 0) {
         inputMessage.classList.add("annotation-form-input-warning")
-        valid = false
+        return false
     }
-
-    return valid
+    return true
 }
 
 function highlightSelectedText() {
