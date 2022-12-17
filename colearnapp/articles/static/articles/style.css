@@ -37,7 +37,7 @@ ul.spaces-list li a img,
 }
 
 ::selection {
-    background-color: #f06;
+    background-color: rgba(164, 0, 72, 0.3);
     color: white;
 }
 
@@ -85,6 +85,10 @@ ul.spaces-list li a img,
 }
 
 .annotated-text {
+    background-color: rgba(164, 0, 72, 0.3);
+}
+
+.mouse-over-annotated-text {
     background-color: #ff0066;
 }
 

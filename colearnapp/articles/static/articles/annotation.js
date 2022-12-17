@@ -19,7 +19,7 @@ function onFormAddBtnClick(event) {
 
     let selectedText = getSelectedText()
     log("selected text:" + selectedText)
-    highlightSelectedText()
+    highlightSelectedText(inputMessage.value)
 
     let articleContent = document.getElementById("colearn-article").innerHTML.toString();
     // let articleContent = document.documentElement.outerHTML;
@@ -62,7 +62,6 @@ function storeAnnotation(payload) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             log('insertAnnotation response:' + xhr.responseText);
-            loadAndDisplayAnnotations()
         }
     }
 
@@ -103,12 +102,18 @@ function validateInputs(inputMessage) {
     return true
 }
 
-function highlightSelectedText() {
+function highlightSelectedText(message) {
     let selectedText = selection.extractContents();
     let span = document.createElement("span");
+
     span.classList.add("annotated-text")
+    span.setAttribute("data-bs-toggle", "tooltip")
+    span.setAttribute("data-bs-placement", "top")
+    span.setAttribute("title", message)
     span.appendChild(selectedText);
     selection.insertNode(span);
+
+    enableTooltip()
 }
 
 
