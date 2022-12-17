@@ -28,7 +28,8 @@ function onFormAddBtnClick(event) {
     log("selected text:" + selectedText)
     highlightSelectedText()
 
-    let articleContent = document.getElementById("colearn-article").innerText.toString();
+    // let articleContent = document.getElementById("colearn-article").innerText.toString();
+    let articleContent = document.documentElement.outerHTML;
 
     log("article:" + articleContent)
 
