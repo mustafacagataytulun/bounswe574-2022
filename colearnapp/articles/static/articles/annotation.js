@@ -1,14 +1,7 @@
 let log = console.log;
 
-// enable tooltip
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-tooltipTriggerList.map(function (tooltipTriggerEl) {
-    if (bootstrap) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    }
-});
 
-let annotationServiceURL = "https://annotations.mustafatulun.com/"
+let annotationServiceURL = "https://annotations.mustafatulun.com/annotations/"
 let chCountForPrefixSuffix = 20;
 let minChCountToAnnotateText = 20;
 let maxChCountToAnnotateText = 100;
@@ -28,8 +21,8 @@ function onFormAddBtnClick(event) {
     log("selected text:" + selectedText)
     highlightSelectedText()
 
-    // let articleContent = document.getElementById("colearn-article").innerText.toString();
-    let articleContent = document.documentElement.outerHTML;
+    let articleContent = document.getElementById("colearn-article").innerHTML.toString();
+    // let articleContent = document.documentElement.outerHTML;
 
     log("article:" + articleContent)
 
@@ -42,7 +35,6 @@ function onFormAddBtnClick(event) {
         "body": {
             "type": "TextualBody",
             "value": inputMessage.value,
-            "format": "application/json",
             "language": "en"
         },
         "target": {
@@ -61,39 +53,46 @@ function onFormAddBtnClick(event) {
 }
 
 function storeAnnotation(payload) {
-    let xhr = new XMLHttpRequest()
-    let url = annotationServiceURL + extractURLPath() + "/"
-
-    log('storeAnnotation url:' + url)
-
-    xhr.open("POST", url)
-    xhr.setRequestHeader('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
-    xhr.send(JSON.stringify(payload))
+    let xhr = insertAnnotation(payload)
 
     xhr.onload = () => {
-        log('storeAnnotation status:' + xhr.status)
+        log('insertAnnotation status:' + xhr.status)
     }
 
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
-            log('storeAnnotation response:' + xhr.responseText);
+            log('insertAnnotation response:' + xhr.responseText);
+            loadAndDisplayAnnotations()
         }
     }
 
     xhr.onerror = () => {
-        console.error('storeAnnotation request failed')
+        console.error('insertAnnotation request failed')
     }
 }
 
-function extractURLPath() {
-    let url = window.location.href.toString()
-    let index = getPosition(url, "/", 3)
-    let path = url.slice(index + 1, url.length)
-    return path.replaceAll("/", "-")
+function insertAnnotation(payload) {
+    let xhr = new XMLHttpRequest()
+
+    xhr.open("POST", annotationServiceURL)
+    xhr.setRequestHeader('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
+    xhr.send(JSON.stringify(payload))
+
+    return xhr
 }
 
-function getPosition(string, subString, index) {
-    return string.split(subString, index).join(subString).length;
+function fetchAnnotations() {
+    let xhr = new XMLHttpRequest()
+
+    let target = encodeURIComponent(window.location.href.toString())
+
+    log('target:' + target)
+
+    xhr.open("GET", annotationServiceURL + "?page=0&target=" + target)
+    xhr.setRequestHeader('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
+    xhr.send()
+
+    return xhr
 }
 
 function validateInputs(inputMessage) {
@@ -191,9 +190,7 @@ function removeAnnotationForm(event) {
     let annotationForm = document.getElementById("annotation-form")
     annotationForm.style.display = 'none'
 
-    let inputTitle = document.getElementById("annotation-form-input-title");
     let inputMessage = document.getElementById("annotation-form-input-message");
-    inputTitle.classList.remove("annotation-form-input-warning")
     inputMessage.classList.remove("annotation-form-input-warning")
 }
 
@@ -215,6 +212,87 @@ function checkSelection(event) {
     }
 }
 
+function loadAndDisplayAnnotations() {
+
+    let xhr = fetchAnnotations()
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            log('fetchAnnotations response:' + xhr.responseText);
+            let responseJson = JSON.parse(xhr.responseText)
+
+            responseJson["items"].forEach((item) => {
+                displayAnnotation(item)
+            })
+
+            let annotatedTexts = document.getElementsByClassName("annotated-text")
+            for (let i = 0; i < annotatedTexts.length; i++) {
+                let element = annotatedTexts[i];
+                element.addEventListener("mouseover", () => onMouseOverAnnotation(element))
+                element.addEventListener("mouseout", () => onMouseOutAnnotation(element))
+            }
+
+            enableTooltip()
+        }
+    }
+}
+
+function onMouseOverAnnotation(element) {
+    element.classList.add("mouse-over-annotated-text")
+}
+
+function onMouseOutAnnotation(element) {
+    element.classList.remove("mouse-over-annotated-text")
+}
+
+function displayAnnotation(annotation) {
+    let prefix = annotation["target"]["selector"]["prefix"]
+    let suffix = annotation["target"]["selector"]["suffix"]
+    let exact = annotation["target"]["selector"]["exact"]
+    let message = annotation["body"]["value"]
+    highlight(exact, prefix, suffix, message)
+}
+
+function highlight(target, prefix, suffix, message) {
+    let article = document.getElementById("colearn-article");
+    let innerHTML = article.innerHTML;
+
+    let index = innerHTML.indexOf(target);
+    if (index >= 0) {
+        innerHTML = innerHTML.substring(0, index) +
+            "<span " +
+            " class='annotated-text' " +
+            "      data-bs-toggle='tooltip' " +
+            "      data-bs-placement='top' " +
+            "      aria-label='" + message + "' " +
+            "      title='" + message + "'>" +
+            innerHTML.substring(index, index + target.length) +
+            "</span>" +
+            innerHTML.substring(index + target.length);
+        article.innerHTML = innerHTML;
+    } else {
+        if (prefix === null || suffix === null) {
+            return
+        }
+        highlight(prefix + target + suffix, null, null)
+    }
+}
+
 document.addEventListener("mouseup", checkSelection);
 document.addEventListener("keyup", checkSelection);
+
+loadAndDisplayAnnotations()
+
+// enable tooltip
+function enableTooltip() {
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        if (bootstrap) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        }
+    });
+}
+
+enableTooltip()
+
 
