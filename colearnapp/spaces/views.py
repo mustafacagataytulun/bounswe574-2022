@@ -1,10 +1,9 @@
 import os
 import logging
 import requests
-import json
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -55,7 +54,7 @@ def wikidata_results(term):
     return JsonResponse(result_list, safe=False)
 
 
-def tag_autocomplete(request, **kwargs):
+def tag_autocomplete(request):
     if 'query' in request.GET:
         term = request.GET['query']
     else:
@@ -64,7 +63,7 @@ def tag_autocomplete(request, **kwargs):
     # return HttpResponse(json.dumps(tags))
     return render(request, 'spaces/wikidata_results.html', {'tags': tags})
 
-def wikidata_q(request, **kwargs):
+def wikidata_q(request):
     if 'query' in request.GET:
         term = request.GET['query']
     else:
