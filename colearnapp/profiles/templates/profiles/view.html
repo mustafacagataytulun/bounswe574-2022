@@ -8,11 +8,23 @@
         <img src="https://colearnapp-profile-pictures.s3.eu-west-1.amazonaws.com/{{ user.id }}.jpg" alt="Profile picture of {{ user.username }}" class="profile-image" onerror="this.src='{% static 'profiles/profile-picture-placeholder.png' %}';" />
         <br />
         {% if user.id == request.user.id %}
+            <!-- {% if notificationCount >= 1 %}
+                <a class="btn btn-secondary" href="{% url 'profiles:notifications' %}">Notifications {{ notificationCount }}</a>
+            {% else %}
+                <a class="btn btn-secondary" href="{% url 'profiles:notifications' %}">Notifications</a>
+            {% endif %} -->
         <a href="{% url 'profiles:edit' %}" class="btn btn-secondary">Edit Profile</a>
         {% endif %}
     </div>
     <div class="col">
         <h1 class="h2">{{ user.username }}</h1>
+        {% if user.id == request.user.id %}
+            <span>
+        {% elif friendCount > 0 %}
+            <h2 class="h2"><a href="{% url 'profiles:remove_friend' id=user.id %}" class="btn btn-secondary">Remove Friend</a></h2>
+        {% else %}
+            <h2 class="h2"><a href="{% url 'profiles:add_friend' id=user.id %}" class="btn btn-secondary">Add Friend</a></h2>
+        {% endif %}
 
         <h2 class="h5 mt-5">Bio</h2>
         {% if user.profile.bio %}
@@ -42,6 +54,19 @@
             <p class="text-muted">This user has not joined any colearning space, yet.</p>
             {% endif %}    
         {% endif %}
+
+        <h2 class="h5 mt-5">Friends</h2>
+            {% for f in friends %}
+            <h2 class="h2"><a href="{% url 'profiles:view' id=f.friendid %}" class="btn btn-secondary">{{ f.friendname }}</a></h2>
+            {% endfor %}
     </div>
 </div>
 {% endblock %}
+<!-- <script>
+setTimeout(function() {
+    if($('#msg').length>0)
+    {
+        $('#msg').remove();
+    }
+}, 3000);
+</script> -->

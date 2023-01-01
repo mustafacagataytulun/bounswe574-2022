@@ -8,6 +8,7 @@ from spaces.models import Space
 
 from .forms import QuizSaveForm
 from .models import Answer, Quiz
+from profiles.models import Notifications
 
 def view(request, space_id, id):
     space = get_object_or_404(Space, pk=space_id)
@@ -72,6 +73,12 @@ def save(request, space_id, id=None):
 
         quiz.space = space
         quiz.save()
+        notification = Notifications()
+        notification.userid = request.user.id
+        notification.timestamp=timezone.now
+        notification.action = request.user.username + " created new quiz! "
+        notification.link = "/spaces/" + str(space_id) + "/quizzes/" + str(quiz.id) 
+        notification.save(notification)
 
         Answer.objects.filter(quiz__pk=quiz.id).delete()
 

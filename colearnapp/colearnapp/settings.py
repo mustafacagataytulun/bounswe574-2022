@@ -31,6 +31,8 @@ except KeyError:
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = os.environ.get('DEBUG') if os.environ.get('DEBUG') else False
+DEBUG_PROPAGATE_EXCEPTIONS = True
+
 
 ALLOWED_HOSTS = [
     'colearnapp.mustafatulun.com',

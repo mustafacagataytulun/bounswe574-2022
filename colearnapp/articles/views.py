@@ -6,8 +6,11 @@ from django.utils import timezone
 
 from spaces.models import Space
 
+from django.db.models import Q
+
 from .forms import ArticleSaveForm, CommentSaveForm
 from .models import Article, Comment
+from profiles.models import Notifications, Friends
 
 def view(request, space_id, id):
     space = get_object_or_404(Space, pk=space_id)
@@ -15,11 +18,15 @@ def view(request, space_id, id):
     comments = Comment.objects.filter(article__id = id)
     has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(space_id)
     form = CommentSaveForm()
+    friendid=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True)
+    notificationCount=Notifications.objects.filter(Q(userid__in=friendid) & Q(isread=False)).count()
+
 
     return render(request, 'articles/view.html', {
         'space': space,
         'article': article,
         'user': request.user,
+        'notificationCount': notificationCount,
         'has_user_joined':has_user_joined,
         'form': form,
         'comments': comments, })
@@ -72,6 +79,12 @@ def save(request, space_id, id=None):
 
         article.space = space
         article.save()
+        notification = Notifications()
+        notification.userid = request.user.id
+        notification.timestamp=timezone.now
+        notification.action = request.user.username + " created new article! "
+        notification.link = "/spaces/" + str(space_id) + "/articles/" + str(article.id) 
+        notification.save(notification)
 
         return redirect('articles:save_success', space_id=space_id, id=article.id)
 
