@@ -291,7 +291,6 @@ function loadAndDisplayAnnotations(page) {
 function addMouseOverListenerToAnnotation(ids) {
     let span = document.getElementById(ids["spanId"])
     span.addEventListener("mouseover", () => {
-        log("over")
         let button = document.getElementById(ids["buttonId"])
         button.setAttribute("style", "display: auto")
         button.addEventListener("click", () => {
@@ -303,7 +302,6 @@ function addMouseOverListenerToAnnotation(ids) {
 function addMouseOutListenerToAnnotation(ids) {
     let span = document.getElementById(ids["spanId"])
     span.addEventListener("mouseout", () => {
-        log("out")
         setTimeout(() => {
             hideButton(ids["buttonId"])
         }, 5000)
