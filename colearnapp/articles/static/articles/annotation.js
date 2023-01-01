@@ -7,7 +7,7 @@ let minChCountToAnnotateText = 20;
 let maxChCountToAnnotateText = 100;
 let selection = null
 let allAnnotations = []
-let annotationDeleteBtnTimeout = null
+let annotationDeleteBtnTimeout = {}
 
 function onFormAddBtnClick(event) {
     event.stopPropagation();
@@ -299,10 +299,11 @@ function addMouseOverListenerToAnnotation(ids) {
     })
 
     span.addEventListener("mouseover", () => {
-        let button = document.getElementById(ids["buttonId"])
-        if (annotationDeleteBtnTimeout) {
-            clearTimeout(annotationDeleteBtnTimeout)
-            annotationDeleteBtnTimeout = null
+        let buttonId = ids["buttonId"]
+        let button = document.getElementById(buttonId)
+        if (buttonId in annotationDeleteBtnTimeout) {
+            clearTimeout(annotationDeleteBtnTimeout[buttonId])
+            delete annotationDeleteBtnTimeout[buttonId]
         }
         button.setAttribute("style", "display: auto")
     })
@@ -311,9 +312,11 @@ function addMouseOverListenerToAnnotation(ids) {
 function addMouseOutListenerToAnnotation(ids) {
     let span = document.getElementById(ids["spanId"])
     span.addEventListener("mouseout", () => {
-        annotationDeleteBtnTimeout = setTimeout(() => {
-            hideButton(ids["buttonId"])
+        let buttonId = ids["buttonId"]
+        let timeout = setTimeout(() => {
+            hideButton(buttonId)
         }, 2000)
+        annotationDeleteBtnTimeout[buttonId] = timeout
     })
 
 
