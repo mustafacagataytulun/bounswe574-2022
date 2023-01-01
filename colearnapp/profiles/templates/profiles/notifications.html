@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load markdownify %}
+
+{% block content %}
+
+<h2 class="h5 mt-5">Notifications</h2>
+
+    {% for n in notifications %}  
+        <a href="{% url 'profiles:notif_read' id=n.id %}"><h5>{{ n.action }}&nbsp;&nbsp;&nbsp;{{ n.created_date }}</h5></a>
+        <a href="{{ n.link }}"> Go To link</a>
+        <hr> 
+    {% endfor %}
+
+<div class="row mt-5">
+
+<div class="col">
+
+<!-- <div id="content">
+  <div class="alert alert-success m-2" id="msg" role="alertdialog"> 
+    {{message}}
+   </div>
+</div> -->
+</div>
+</div>
+
+{% endblock %}

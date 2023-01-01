@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load markdownify %}
+
+{% block content %}
+
+ {% if messages %}
+{% for message in messages %}
+<div class="row mt-5">
+
+<div class="col">
+
+<!-- <div id="content">
+  <div class="alert alert-success m-2" id="msg" role="alertdialog"> 
+    {{message}}
+   </div>
+</div> -->
+</div>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
