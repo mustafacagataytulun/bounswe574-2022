@@ -56,9 +56,9 @@
         {% endif %}
 
         <h2 class="h5 mt-5">Friends</h2>
-            {% for f in friends %}
+        {% for f in friends %}
             <h2 class="h2"><a href="{% url 'profiles:view' id=f.friendid %}" class="btn btn-secondary">{{ f.friendname }}</a></h2>
-            {% endfor %}
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
