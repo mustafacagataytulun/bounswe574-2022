@@ -49,7 +49,7 @@ function onFormAddBtnClick(event) {
     }
 
     log("payload:" + JSON.stringify(payload))
-    storeAnnotation(payload)
+    storeAnnotation(payload, inputMessage.value)
 }
 
 function storeAnnotation(payload, selectedText) {
@@ -125,6 +125,7 @@ function highlightSelectedText(message, id) {
     span.setAttribute("data-bs-toggle", "tooltip")
     span.setAttribute("data-bs-placement", "top")
     span.setAttribute("title", message)
+    span.setAttribute("aria-label", message)
     span.appendChild(selectedText);
 
     let button = document.createElement("button")
@@ -290,12 +291,14 @@ function loadAndDisplayAnnotations(page) {
 
 function addMouseOverListenerToAnnotation(ids) {
     let span = document.getElementById(ids["spanId"])
+    let button = document.getElementById(ids["buttonId"])
+    button.addEventListener("click", () => {
+        onAnnotationDeleteButtonPressed(ids)
+    })
+
     span.addEventListener("mouseover", () => {
         let button = document.getElementById(ids["buttonId"])
         button.setAttribute("style", "display: auto")
-        button.addEventListener("click", () => {
-            onAnnotationDeleteButtonPressed(ids)
-        })
     })
 }
 
@@ -306,6 +309,8 @@ function addMouseOutListenerToAnnotation(ids) {
             hideButton(ids["buttonId"])
         }, 5000)
     })
+
+
 }
 
 function hideButton(buttonId) {
