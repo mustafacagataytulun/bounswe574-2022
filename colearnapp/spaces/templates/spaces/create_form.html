@@ -2,6 +2,14 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    <script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
+    <link   rel="stylesheet"   href="https://unpkg.com/@trevoreyre/autocomplete-js/dist/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+</head>
 <div class="row justify-content-center">
     <div class="col-4 mt-5">
         <h2 class="text-center">Create Space</h2>
@@ -15,6 +23,12 @@
                 <div class="col d-flex">
                 </div>
 
+                <div id="autocomplete" class="autocomplete" style="width: 395px; ">
+                    <label for="semanticTags">Semantic Tags</label>
+                    <input name="semanticTags" id="semanticTags" class="typeahead form-control"/>
+                    <ul id="ul1" class="autocomplete-result-list" style="color:red"></ul>
+                </div>
+
                 <div class="col d-flex justify-content-end">
                     {% bootstrap_button button_type="submit" content="Create" %}
                 </div>
@@ -24,4 +38,16 @@
         <p class="mt-5"><a href="{% url 'dashboard:index' %}">&laquo; Back to Home</a></p>
     </div>
 </div>
+
+<script type="text/javascript">
+    $('input.typeahead').typeahead({
+        source:  function (query, process) {
+        return $.get('/spaces/wikidata_q/', { query: query }, function (data) {
+                console.log(data);
+                //data = $.parseJSON(data);
+                return process(data);
+            });
+        }
+    });
+</script>
 {% endblock %}

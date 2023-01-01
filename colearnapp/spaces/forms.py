@@ -7,10 +7,11 @@ class SpaceCreateForm(forms.ModelForm):
 
     class Meta:
         model = Space
-        fields = ('name', 'tags',)
-        help_texts = {
-            'tags': 'Separate tags with commas.',
-        }
+        #fields = ('name', 'tags',)
+        #help_texts = {
+        #    'tags': 'Separate tags with commas.',
+        #}
+        fields = ('name',)
 
 class MainPageSaveForm(forms.ModelForm):
     class Meta:

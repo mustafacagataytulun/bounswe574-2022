@@ -1,6 +1,10 @@
 import os
+import logging
+import requests
+import json
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -16,6 +20,60 @@ from .models import MainPage, Space
 class SpaceCoversStorage(S3Boto3Storage):
     bucket_name = 'colearnapp-space-covers'
 
+
+def wikidata_results(term):
+    wikidata_query = {
+        "action": "wbsearchentities",
+        "search": term,
+        "language": "en",
+        "format": "json",
+        "limit": 50,
+        "continue": 0,
+    }
+    headers = {
+        'Accept': 'application/json'
+    }
+    response = requests.get('https://www.wikidata.org/w/api.php', params=wikidata_query, headers=headers)
+    data = response.json()
+    print(data)
+    search_data = data['search']
+    result_list = []
+    for item in search_data:
+        label = item['display']['label']['value']
+        id = item['id']
+        print(label)
+        print(id)
+        description = ""
+        if item['display'].get('description'):
+            description = item['display']['description']['value']
+        #description = item['display']['description']['value']
+        print(description)
+        result_list.append(label + ", " + description)
+
+        #result_list.append(label + ", " + id)
+    # return HttpResponse(json.dumps(result_list))
+    return JsonResponse(result_list, safe=False)
+
+
+def tag_autocomplete(request, **kwargs):
+    if 'query' in request.GET:
+        term = request.GET['query']
+    else:
+        term = "all"
+    tags = wikidata_results(term)
+    # return HttpResponse(json.dumps(tags))
+    return render(request, 'spaces/wikidata_results.html', {'tags': tags})
+
+def wikidata_q(request, **kwargs):
+    if 'query' in request.GET:
+        term = request.GET['query']
+    else:
+        term = "all"
+    tags = wikidata_results(term)
+    #return HttpResponse(json.dumps(tags))
+    return tags
+
+
 @login_required
 def create(request):
     if request.method == "POST":
@@ -27,6 +85,7 @@ def create(request):
             space.save()
 
             space.subscribed_users.add(request.user)
+            space.semantic_tags = request.POST.get('semanticTags')
             space.save()
 
             main_page = MainPage(content='### Welcome to ' + space.name + ' colearning space!\n\n' +
@@ -39,13 +98,24 @@ def create(request):
             cover_image_extension = os.path.splitext(str(cover_image))[1]
             storage = SpaceCoversStorage()
             storage.save(str(space.id) + cover_image_extension, cover_image)
+            print("semantic_tags:", space.semantic_tags)
+            print("request.POST:", request.POST)
+            print("request:", request)
+            print("request.POST.get('query'):", request.POST.get('query'))
+            print("request.POST.get('semanticTags'):", request.POST.get('semanticTags'))
 
             return redirect('spaces:create_success', id=space.id)
 
     else:
+        if 'query' in request.GET:
+            term = request.GET['query']
+        else:
+            term = "all"
+        tags = wikidata_results(term)
         form = SpaceCreateForm()
 
-    return render(request, 'spaces/create_form.html', {'form': form})
+    return render(request, 'spaces/create_form.html', {'tags': tags,
+                                                       'form': form})
 
 @login_required
 def create_success(request, id):
@@ -56,12 +126,19 @@ def main(request, id):
     main_page = MainPage.objects.get(space_id=space.id)
     has_user_joined = request.user.is_authenticated and request.user.has_joined_to_space(id)
     joined_users = space.subscribed_users.all()
+    if joined_users:
+        related_spaces = Space.objects.filter(subscribed_users__pk=request.user.id)
+    else:
+        related_spaces = Space.objects.all()
+
+    logging.warning(related_spaces)
 
     return render(request, 'spaces/main.html', {
         'space':space,
         'main_page':main_page,
         'has_user_joined':has_user_joined,
-        'joined_users':joined_users,})
+        'joined_users':joined_users,
+        'related_spaces':related_spaces})
 
 def save_main_page(request, id):
     has_user_joined = request.user.has_joined_to_space(id)
