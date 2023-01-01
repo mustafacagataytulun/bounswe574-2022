@@ -8,7 +8,11 @@ from spaces.models import Space
 from users.models import ColearnAppUser
 
 from .forms import ProfileEditForm
-from .models import Profile
+from .models import *
+from django.db.models import Q
+
+
+from django.contrib import messages
 
 #pylint: disable=W0223
 class ProfilePicturesStorage(S3Boto3Storage):
@@ -18,10 +22,20 @@ class ProfilePicturesStorage(S3Boto3Storage):
 def view(request, id):
     user = get_object_or_404(ColearnAppUser, pk=id)
     user_spaces = Space.objects.filter(subscribed_users=user).order_by('name')
+    
+    friends=Friends.objects.filter(userid=id)
+    friendCount=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True).count() 
+    friendid=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True)
+    notificationCount=Notifications.objects.filter(Q(userid__in=friendid) & Q(isread=False)).count()
+
+
 
     return render(request, 'profiles/view.html', {
         'user': user,
         'user_spaces': user_spaces,
+        'friends': friends,
+        'notificationCount': notificationCount,
+        'friendCount': friendCount,
     })
 
 @login_required
@@ -59,3 +73,46 @@ def edit(request):
 @login_required
 def edit_success(request):
     return render(request, 'profiles/edit_success.html')
+
+@login_required
+def add_friend(request,id):
+    # print(id)
+    # friend=ColearnAppUser.objects.get(id=id)
+    # print(friend)
+    _friendname=ColearnAppUser.objects.get(id=id).username
+    new_friend = Friends(userid=request.user.id, friendid=id, friendname=_friendname)
+    new_friend.save()
+    new_friend2=Friends(userid=id, friendid=request.user.id, friendname=request.user.username)
+    new_friend2.save()
+    messages.success(request,'Friend added!')
+    return render(request, 'profiles/view.html')
+
+@login_required
+def remove_friend(request,id):
+    # print(id)
+    # friend=ColearnAppUser.objects.get(id=id)
+    # print(friend)
+    _friendname=ColearnAppUser.objects.get(id=id).username
+    Friends.objects.filter(friendid=id).filter(userid=request.user.id).delete()
+    Friends.objects.filter(userid=id).filter(friendid=request.user.id).delete()
+    
+    messages.success(request,'Friend removed!')
+    return render(request, 'profiles/view.html')
+
+@login_required
+def notifications(request):
+    friendid=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True)
+    notifications=Notifications.objects.filter(Q(userid__in=friendid) & Q(isread=False))
+    return render(request, 'profiles/notifications.html', {
+        'notifications': notifications,
+    })
+
+@login_required
+def notif_read(request,id):
+
+    Notifications.objects.filter(id=id).update(isread = True)
+
+    messages.success(request,'Notification is read!')
+    return render(request, 'profiles/view.html')
+
+

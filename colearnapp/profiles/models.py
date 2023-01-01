@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from users.models import ColearnAppUser
 
@@ -9,3 +10,22 @@ class Profile(models.Model):
 
     def __str__(self):
         return 'Profile of ' + self.user.username
+
+class Friends(models.Model):
+    userid=models.PositiveIntegerField()
+    friendid=models.PositiveIntegerField()
+    friendname=models.TextField()
+
+    def __str__(self):
+        return self.friendname
+
+class Notifications(models.Model):
+    userid=models.PositiveIntegerField()
+    action=models.TextField()
+    link=models.TextField(default="null")
+    isread=models.BooleanField(default=False)
+    created_date = models.DateTimeField(default=timezone.now)
+
+
+    def __str__(self):
+        return "{} : {} []".format(self.userid , self.action , self.link , self.isread , self.created_date)

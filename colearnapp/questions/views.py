@@ -8,6 +8,7 @@ from spaces.models import Space
 
 from .forms import QuestionSaveForm, AnswerSaveForm
 from .models import Question, Answer
+from profiles.models import Notifications
 
 def view(request, space_id, id):
     space = get_object_or_404(Space, pk=space_id)
@@ -72,6 +73,12 @@ def save(request, space_id, id=None):
 
         question.space = space
         question.save()
+        notification = Notifications()
+        notification.userid = request.user.id
+        notification.timestamp=timezone.now
+        notification.action = request.user.username + " created new quiz! "
+        notification.link = "/spaces/" + str(space_id) + "/questions/" + str(question.id) 
+        notification.save(notification)
 
         return redirect('questions:save_success', space_id=space_id, id=question.id)
 
