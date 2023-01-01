@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import downvote, save, save_comment, save_success, upvote, view, save_annotation
+from .views import downvote, save, save_comment, save_success, upvote, view
 
 app_name = 'articles'
 
@@ -13,5 +13,4 @@ urlpatterns = [
     path('<int:id>/upvote', upvote, name='upvote'),
     path('<int:id>/downvote', downvote, name='downvote'),
     path('<int:id>/save_comment', save_comment, name='save_comment'),
-    path('<int:id>/save_annotation', save_annotation, name='save_annotation'),
 ]

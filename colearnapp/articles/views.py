@@ -132,15 +132,3 @@ def downvote(request, space_id, id):
         Article.objects.filter(pk=id).update(score=F('score') + 1)
 
     return redirect('articles:view', space_id=space.id, id=article.id)
-
-
-@login_required
-def save_annotation(request, space_id, id):
-    has_user_joined = request.user.has_joined_to_space(space_id)
-
-    if not has_user_joined:
-        return redirect('articles:view', space_id=space_id, id=id)
-
-    article = get_object_or_404(Article, pk=id)
-
-    return redirect('articles:view', space_id=space_id, id=article.id)
