@@ -80,14 +80,14 @@ function insertAnnotation(payload) {
     return xhr
 }
 
-function fetchAnnotations() {
+function fetchAnnotations(page) {
     let xhr = new XMLHttpRequest()
 
     let target = encodeURIComponent(window.location.href.toString())
 
     log('target:' + target)
 
-    xhr.open("GET", annotationServiceURL + "?page=0&target=" + target)
+    xhr.open("GET", annotationServiceURL + "?page=" + page + "&target=" + target)
     xhr.setRequestHeader('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
     xhr.send()
 
@@ -217,9 +217,9 @@ function checkSelection(event) {
     }
 }
 
-function loadAndDisplayAnnotations() {
+function loadAndDisplayAnnotations(page) {
 
-    let xhr = fetchAnnotations()
+    let xhr = fetchAnnotations(page)
 
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
@@ -238,6 +238,11 @@ function loadAndDisplayAnnotations() {
             }
 
             enableTooltip()
+
+            if (responseJson["next"]) {
+                log("fetching " + (page + 1))
+                loadAndDisplayAnnotations(page + 1)
+            }
         }
     }
 }
@@ -286,7 +291,7 @@ function highlight(target, prefix, suffix, message) {
 document.addEventListener("mouseup", checkSelection);
 document.addEventListener("keyup", checkSelection);
 
-loadAndDisplayAnnotations()
+loadAndDisplayAnnotations(0)
 
 // enable tooltip
 function enableTooltip() {
