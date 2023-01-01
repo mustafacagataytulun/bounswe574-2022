@@ -305,10 +305,14 @@ function addMouseOutListenerToAnnotation(ids) {
     span.addEventListener("mouseout", () => {
         log("out")
         setTimeout(() => {
-            let button = document.getElementById(ids["buttonId"])
-            button.setAttribute("style", "display: none")
+            hideButton(ids["buttonId"])
         }, 5000)
     })
+}
+
+function hideButton(buttonId) {
+    let button = document.getElementById(buttonId)
+    button.setAttribute("style", "display: none")
 }
 
 function onAnnotationDeleteButtonPressed(ids) {
@@ -316,7 +320,7 @@ function onAnnotationDeleteButtonPressed(ids) {
 
     xhr.onload = () => {
         log('deleteAnnotation status:' + xhr.status)
-        if (xhr.status === 209) {
+        if (xhr.status === 204) {
             let span = document.getElementById(ids["spanId"])
             span.classList.remove("annotated-text")
             span.removeAttribute("id")
@@ -326,6 +330,7 @@ function onAnnotationDeleteButtonPressed(ids) {
             span.removeAttribute("aria-label")
             span.removeAttribute("data-bs-original-title")
             recreateNode(span)
+            hideButton(ids["buttonId"])
         }
     }
 
