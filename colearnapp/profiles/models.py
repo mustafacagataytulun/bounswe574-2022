@@ -25,7 +25,4 @@ class Notifications(models.Model):
     link=models.TextField(default="null")
     isread=models.BooleanField(default=False)
     created_date = models.DateTimeField(default=timezone.now)
-
-
-    def __str__(self):
-        return "{} : {} []".format(self.userid , self.action , self.link , self.isread , self.created_date)
+    
