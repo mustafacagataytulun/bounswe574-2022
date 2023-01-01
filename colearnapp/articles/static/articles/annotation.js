@@ -6,6 +6,7 @@ let chCountForPrefixSuffix = 20;
 let minChCountToAnnotateText = 20;
 let maxChCountToAnnotateText = 100;
 let selection = null
+let allAnnotations = []
 
 function onFormAddBtnClick(event) {
     event.stopPropagation();
@@ -19,7 +20,6 @@ function onFormAddBtnClick(event) {
 
     let selectedText = getSelectedText()
     log("selected text:" + selectedText)
-    highlightSelectedText(inputMessage.value)
 
     let articleContent = document.getElementById("colearn-article").innerHTML.toString();
     // let articleContent = document.documentElement.outerHTML;
@@ -52,7 +52,7 @@ function onFormAddBtnClick(event) {
     storeAnnotation(payload)
 }
 
-function storeAnnotation(payload) {
+function storeAnnotation(payload, selectedText) {
     let xhr = insertAnnotation(payload)
 
     xhr.onload = () => {
@@ -62,12 +62,16 @@ function storeAnnotation(payload) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             log('insertAnnotation response:' + xhr.responseText);
+            let responseJson = JSON.parse(xhr.responseText)
+            highlightSelectedText(selectedText, responseJson["id"])
         }
     }
 
     xhr.onerror = () => {
         console.error('insertAnnotation request failed')
     }
+
+    return xhr
 }
 
 function insertAnnotation(payload) {
@@ -76,6 +80,15 @@ function insertAnnotation(payload) {
     xhr.open("POST", annotationServiceURL)
     xhr.setRequestHeader('Content-Type', 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"')
     xhr.send(JSON.stringify(payload))
+
+    return xhr
+}
+
+function deleteAnnotation(url) {
+    let xhr = new XMLHttpRequest()
+
+    xhr.open("DELETE", url)
+    xhr.send()
 
     return xhr
 }
@@ -102,20 +115,42 @@ function validateInputs(inputMessage) {
     return true
 }
 
-function highlightSelectedText(message) {
+function highlightSelectedText(message, id) {
     let selectedText = selection.extractContents();
     let span = document.createElement("span");
 
+    let spanId = createSpanId(id)
     span.classList.add("annotated-text")
+    span.setAttribute("id", spanId)
     span.setAttribute("data-bs-toggle", "tooltip")
     span.setAttribute("data-bs-placement", "top")
     span.setAttribute("title", message)
     span.appendChild(selectedText);
+
+    let button = document.createElement("button")
+    button.classList.add("btn")
+    button.classList.add("btn-danger")
+    button.classList.add("bi")
+    button.classList.add("bi-trash")
+    button.classList.add("annotation-delete")
+    button.setAttribute("id", id)
+    button.setAttribute("style", "display: none;")
+    selection.insertNode(button);
     selection.insertNode(span);
 
     enableTooltip()
+
+    let ids = {
+        "spanId": spanId,
+        "buttonId": id
+    }
+    addMouseOverListenerToAnnotation(ids)
+    addMouseOutListenerToAnnotation(ids)
 }
 
+function createSpanId(id) {
+    return id + "-span"
+}
 
 function findPrefix(target, content) {
     let targetIndex = content.search(target)
@@ -242,8 +277,60 @@ function loadAndDisplayAnnotations(page) {
             if (responseJson["next"]) {
                 log("fetching " + (page + 1))
                 loadAndDisplayAnnotations(page + 1)
+            } else {
+                allAnnotations.forEach((ids) => {
+                    addMouseOverListenerToAnnotation(ids)
+                    addMouseOutListenerToAnnotation(ids)
+                })
+                allAnnotations = []
             }
         }
+    }
+}
+
+function addMouseOverListenerToAnnotation(ids) {
+    let span = document.getElementById(ids["spanId"])
+    span.addEventListener("mouseover", () => {
+        log("over")
+        let button = document.getElementById(ids["buttonId"])
+        button.setAttribute("style", "display: auto")
+        button.addEventListener("click", () => {
+            onAnnotationDeleteButtonPressed(ids)
+        })
+    })
+}
+
+function addMouseOutListenerToAnnotation(ids) {
+    let span = document.getElementById(ids["spanId"])
+    span.addEventListener("mouseout", () => {
+        log("out")
+        setTimeout(() => {
+            let button = document.getElementById(ids["buttonId"])
+            button.setAttribute("style", "display: none")
+        }, 5000)
+    })
+}
+
+function onAnnotationDeleteButtonPressed(ids) {
+    let xhr = deleteAnnotation(ids["buttonId"])
+
+    xhr.onload = () => {
+        log('deleteAnnotation status:' + xhr.status)
+        if (xhr.status === 209) {
+            let span = document.getElementById(ids["spanId"])
+            span.classList.remove("annotated-text")
+            span.removeAttribute("id")
+            span.removeAttribute("data-bs-toggle")
+            span.removeAttribute("data-bs-placement")
+            span.removeAttribute("title")
+            span.removeAttribute("aria-label")
+            span.removeAttribute("data-bs-original-title")
+            recreateNode(span)
+        }
+    }
+
+    xhr.onerror = () => {
+        console.error('deleteAnnotation request failed')
     }
 }
 
@@ -260,17 +347,20 @@ function displayAnnotation(annotation) {
     let suffix = annotation["target"]["selector"]["suffix"]
     let exact = annotation["target"]["selector"]["exact"]
     let message = annotation["body"]["value"]
-    highlight(exact, prefix, suffix, message)
+    let id = annotation["id"]
+    highlight(exact, message, id, prefix, suffix)
 }
 
-function highlight(target, prefix, suffix, message) {
+function highlight(target, message, id, prefix, suffix) {
     let article = document.getElementById("colearn-article");
     let innerHTML = article.innerHTML;
 
     let index = innerHTML.indexOf(target);
     if (index >= 0) {
+        let spanId = createSpanId(id)
         innerHTML = innerHTML.substring(0, index) +
             "<span " +
+            " id='" + spanId + "'" +
             " class='annotated-text' " +
             "      data-bs-toggle='tooltip' " +
             "      data-bs-placement='top' " +
@@ -278,13 +368,31 @@ function highlight(target, prefix, suffix, message) {
             "      title='" + message + "'>" +
             innerHTML.substring(index, index + target.length) +
             "</span>" +
+            "<button " +
+            " id='" + id + "'" +
+            " style='display: none;'" +
+            " class='btn btn-danger bi bi-trash annotation-delete'></button> " +
             innerHTML.substring(index + target.length);
         article.innerHTML = innerHTML;
+        allAnnotations.push({
+            "spanId": spanId,
+            "buttonId": id
+        })
     } else {
         if (prefix === null || suffix === null) {
             return
         }
-        highlight(prefix + target + suffix, null, null)
+        highlight(prefix + target + suffix, message, id, null, null)
+    }
+}
+
+function recreateNode(el, withChildren) {
+    if (withChildren) {
+        el.parentNode.replaceChild(el.cloneNode(true), el);
+    } else {
+        let newEl = el.cloneNode(false);
+        while (el.hasChildNodes()) newEl.appendChild(el.firstChild);
+        el.parentNode.replaceChild(newEl, el);
     }
 }
 

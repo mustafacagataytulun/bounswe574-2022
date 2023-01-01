@@ -95,3 +95,7 @@ ul.spaces-list li a img,
 .annotation-form-input-warning {
     border: 1px solid red;
 }
+
+.annotation-delete {
+    margin-left: 1%;
+}
