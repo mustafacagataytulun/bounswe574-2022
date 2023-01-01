@@ -3,14 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-
-from spaces.models import Space
-
 from django.db.models import Q
 
+from spaces.models import Space
+from profiles.models import Notifications, Friends
 from .forms import ArticleSaveForm, CommentSaveForm
 from .models import Article, Comment
-from profiles.models import Notifications, Friends
+
 
 def view(request, space_id, id):
     space = get_object_or_404(Space, pk=space_id)
@@ -83,7 +82,7 @@ def save(request, space_id, id=None):
         notification.userid = request.user.id
         notification.timestamp=timezone.now
         notification.action = request.user.username + " created new article! "
-        notification.link = "/spaces/" + str(space_id) + "/articles/" + str(article.id) 
+        notification.link = "/spaces/" + str(space_id) + "/articles/" + str(article.id)
         notification.save(notification)
 
         return redirect('articles:save_success', space_id=space_id, id=article.id)

@@ -2,17 +2,15 @@ import os
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
+from django.db.models import Q
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from spaces.models import Space
 from users.models import ColearnAppUser
 
+from profiles.models import Notifications, Friends, Profile
 from .forms import ProfileEditForm
-from .models import *
-from django.db.models import Q
-
-
-from django.contrib import messages
 
 #pylint: disable=W0223
 class ProfilePicturesStorage(S3Boto3Storage):
@@ -22,9 +20,8 @@ class ProfilePicturesStorage(S3Boto3Storage):
 def view(request, id):
     user = get_object_or_404(ColearnAppUser, pk=id)
     user_spaces = Space.objects.filter(subscribed_users=user).order_by('name')
-    
     friends=Friends.objects.filter(userid=id)
-    friendCount=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True).count() 
+    friendCount=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True).count()
     friendid=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True)
     notificationCount=Notifications.objects.filter(Q(userid__in=friendid) & Q(isread=False)).count()
 
@@ -95,16 +92,15 @@ def remove_friend(request,id):
     _friendname=ColearnAppUser.objects.get(id=id).username
     Friends.objects.filter(friendid=id).filter(userid=request.user.id).delete()
     Friends.objects.filter(userid=id).filter(friendid=request.user.id).delete()
-    
     messages.success(request,'Friend removed!')
     return render(request, 'profiles/view.html')
 
 @login_required
 def notifications(request):
     friendid=Friends.objects.filter(userid=request.user.id).values_list('friendid', flat=True)
-    notifications=Notifications.objects.filter(Q(userid__in=friendid) & Q(isread=False))
+    notifications_existing=Notifications.objects.filter(Q(userid__in=friendid) & Q(isread=False))
     return render(request, 'profiles/notifications.html', {
-        'notifications': notifications,
+        'notifications': notifications_existing,
     })
 
 @login_required
@@ -114,5 +110,4 @@ def notif_read(request,id):
 
     messages.success(request,'Notification is read!')
     return render(request, 'profiles/view.html')
-
-
+    
