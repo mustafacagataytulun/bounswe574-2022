@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<head>
+    <title> Example of Bootstrap Typeahead with Ajax </title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    <script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
+    <link   rel="stylesheet"   href="https://unpkg.com/@trevoreyre/autocomplete-js/dist/style.css" />
+</head>
+<div class="row justify-content-center">
+    <div class="col mt-5">
+        <h2 class="text-center">Wikidata Results</h2>
+
+        <!--<input class="typeahead form-control" id="query" style="margin:0px auto;width:300px;" type="text"> -->
+
+    <div id="autocomplete" class="autocomplete" style="width: 300px; margin: 400px auto;">
+        <input class="typeahead form-control"/>
+        <ul id="ul1" class="autocomplete-result-list" style="color:red"></ul>
+    </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $('input.typeahead').typeahead({
+        source:  function (query, process) {
+        return $.get('/spaces/wikidata_q/', { query: query }, function (data) {
+                console.log(data);
+                //data = $.parseJSON(data);
+                return process(data);
+            });
+        }
+    });
+
+</script>
+{% endblock %}

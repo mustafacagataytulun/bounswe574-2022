@@ -1,11 +1,13 @@
 from django.urls import path
 from django.views.generic.base import RedirectView
 
-from .views import articles, create, create_success, glossary, join, leave, main, questions, quizzes, save_main_page
+from .views import articles, create, create_success, glossary, join, leave, main, questions, quizzes, save_main_page, tag_autocomplete, wikidata_q
 
 app_name = 'spaces'
 
 urlpatterns = [
+    path('wikidata_results/', tag_autocomplete, name='tag_autocomplete'),
+    path('wikidata_q/', wikidata_q, name='wikidata_q'),
     path('create/', create, name='create'),
     path('create/success/<int:id>', create_success, name='create_success'),
     path('<int:id>', RedirectView.as_view(pattern_name='spaces:main', permanent=False), name='view'),
