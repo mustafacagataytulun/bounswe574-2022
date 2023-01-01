@@ -97,5 +97,6 @@ ul.spaces-list li a img,
 }
 
 .annotation-delete {
-    margin-left: 1%;
+    margin-left: 0.5%;
+    position: absolute;
 }

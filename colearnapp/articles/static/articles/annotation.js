@@ -7,6 +7,7 @@ let minChCountToAnnotateText = 20;
 let maxChCountToAnnotateText = 100;
 let selection = null
 let allAnnotations = []
+let annotationDeleteBtnTimeout = {}
 
 function onFormAddBtnClick(event) {
     event.stopPropagation();
@@ -131,6 +132,7 @@ function highlightSelectedText(message, id) {
     let button = document.createElement("button")
     button.classList.add("btn")
     button.classList.add("btn-danger")
+    button.classList.add("btn-sm")
     button.classList.add("bi")
     button.classList.add("bi-trash")
     button.classList.add("annotation-delete")
@@ -297,7 +299,12 @@ function addMouseOverListenerToAnnotation(ids) {
     })
 
     span.addEventListener("mouseover", () => {
-        let button = document.getElementById(ids["buttonId"])
+        let buttonId = ids["buttonId"]
+        let button = document.getElementById(buttonId)
+        if (buttonId in annotationDeleteBtnTimeout) {
+            clearTimeout(annotationDeleteBtnTimeout[buttonId])
+            delete annotationDeleteBtnTimeout[buttonId]
+        }
         button.setAttribute("style", "display: auto")
     })
 }
@@ -305,9 +312,11 @@ function addMouseOverListenerToAnnotation(ids) {
 function addMouseOutListenerToAnnotation(ids) {
     let span = document.getElementById(ids["spanId"])
     span.addEventListener("mouseout", () => {
-        setTimeout(() => {
-            hideButton(ids["buttonId"])
-        }, 5000)
+        let buttonId = ids["buttonId"]
+        let timeout = setTimeout(() => {
+            hideButton(buttonId)
+        }, 2000)
+        annotationDeleteBtnTimeout[buttonId] = timeout
     })
 
 
@@ -379,7 +388,7 @@ function highlight(target, message, id, prefix, suffix) {
             "<button " +
             " id='" + id + "'" +
             " style='display: none;'" +
-            " class='btn btn-danger bi bi-trash annotation-delete'></button> " +
+            " class='btn btn-danger btn-sm bi bi-trash annotation-delete'></button> " +
             innerHTML.substring(index + target.length);
         article.innerHTML = innerHTML;
         allAnnotations.push({
