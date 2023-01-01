@@ -1,98 +1,128 @@
 {% extends 'base.html' %}
 {% load markdownify %}
 {% load django_bootstrap5 %}
-
+{% load static %}
 {% block content %}
 
-<div class="row mt-5">
-    <div class="col">
-        <a href="{% url 'spaces:articles' space.id %}">&laquo; Back to Colearning Space</a>
+    <button type="button"
+            class="btn btn-secondary bi bi-plus"
+            id="floating-btn"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Add annotation"></button>
+
+    <div id="annotation-form">
+        <form>
+            <div class="mb-3 p-2 border">
+                <label for="annotation-form-input-message" class="form-label">Message</label>
+                <textarea type="text-area" class="form-control" id="annotation-form-input-message" rows="5"></textarea>
+            </div>
+            <div id="annotation-form-add-btn" class="btn btn-primary">Add</div>
+            <div id="annotation-form-close-btn" class="btn btn-danger">Close</div>
+        </form>
     </div>
-    <div class="col text-end">
-        {% if user.is_authenticated %}
-            {% if has_user_joined %}
-            <a href="{% url 'articles:edit' space.id article.id %}" class="btn btn-secondary">Edit Article</a>
-            {% else %}
-            <span title="You must join this Colearning Space to edit articles." data-bs-toggle="tooltip">
+
+    <div class="row mt-5">
+        <div class="col">
+            <a href="{% url 'spaces:articles' space.id %}">&laquo; Back to Colearning Space</a>
+        </div>
+        <div class="col text-end">
+            {% if user.is_authenticated %}
+                {% if has_user_joined %}
+                    <a href="{% url 'articles:edit' space.id article.id %}" class="btn btn-secondary">Edit Article</a>
+                {% else %}
+                    <span title="You must join this Colearning Space to edit articles." data-bs-toggle="tooltip">
                 <button type="submit" class="btn btn-secondary" disabled>Edit Article</button>
             </span>
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col mt-5">
-        <h1 class="text-center">{{ article.title }}</h1>
-        <p class="text-center">
-            {% for tag in space.get_tag_list %}
-            <span class="badge bg-info">{{ tag }}</span>
-            {% endfor %}
-        </p>
-        <p class="text-center text-muted">
-            Written by <a href="#">{{ article.created_by.username }}</a> on {{ article.created_date.date }}
+    <div class="row">
+        <div id="colearn-article" class="col mt-5">
+            <h1 class="text-center">{{ article.title }}</h1>
+            <p class="text-center">
+                {% for tag in space.get_tag_list %}
+                    <span class="badge bg-info">{{ tag }}</span>
+                {% endfor %}
+            </p>
+            <p class="text-center text-muted">
+                Written by <a href="#">{{ article.created_by.username }}</a> on {{ article.created_date.date }}
 
-            {% if article.updated_by and article.updated_date %}
-            &ndash; Last Updated by <a href="#">{{ article.updated_by.username }}</a> on {{ article.updated_date.date }}
-            {% endif %}
-        </p>
-        <p class="text-center">
-            <a href="{% url 'articles:upvote' space.id article.id %}" title="Upvote"><i class="bi-caret-up-fill
+                {% if article.updated_by and article.updated_date %}
+                    &ndash; Last Updated by <a href="#">{{ article.updated_by.username }}</a> on
+                    {{ article.updated_date.date }}
+                {% endif %}
+            </p>
+            <p class="text-center">
+                <a href="{% url 'articles:upvote' space.id article.id %}" title="Upvote"><i class="bi-caret-up-fill
                 {% if request.user in question.upvoters.all %}
                 text-success
                 {% else %}
                 text-secondary
                 {% endif %}
-                " aria-label="Upvote"></i></a> 
-            <span class="mx-2 badge 
+                " aria-label="Upvote"></i></a>
+                <span class="mx-2 badge
             {% if article.score >= 0 %}
             bg-success
             {% else %}
             bg-danger
             {% endif %}
-            ">{{ article.score }}</span> 
-            <a href="{% url 'articles:downvote' space.id article.id %}" title="Downvote"><i class="bi-caret-down-fill 
+            ">{{ article.score }}</span>
+                <a href="{% url 'articles:downvote' space.id article.id %}" title="Downvote"><i class="bi-caret-down-fill
                 {% if request.user in question.downvoters.all %}
                 text-danger
                 {% else %}
                 text-secondary
                 {% endif %}
                 " aria-label="Downvote"></i></a>
-        </p>
-        {{ article.content|markdownify }}
-        <hr class="mt-5" />
-        <div class="row justify-content-center">
-            <div class="col-6 mt-5">
-                <h3 class="text-center mb-4">Comments</h3>
-                {{ query }}
-                {% if comments %}
-                    {% for comment in comments %}
-                    <p>{{ comment.content}}</p>
-                    <p class="text-end text-muted">{{ comment.created_by.username }} &ndash; {{ comment.created_date }}</p>
-                    <div class="row justify-content-center"><div class="col-4"><hr /></div></div>
-                    {% endfor %}
-                {% else %}
-                <p>Nobody has commented on this article, yet. Do you want to be first?</p>
-                {% endif %}
-                {% if has_user_joined %}
-                <form class="mt-5" method="post" action="{% url 'articles:save_comment' space.id article.id %}">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
+            </p>
+            {{ article.content|markdownify }}
+            <hr class="mt-5"/>
+            <div class="row justify-content-center">
+                <div class="col-6 mt-5">
+                    <h3 class="text-center mb-4">Comments</h3>
+                    {{ query }}
+                    {% if comments %}
+                        {% for comment in comments %}
+                            <p>{{ comment.content }}</p>
+                            <p class="text-end text-muted">{{ comment.created_by.username }}
+                                &ndash; {{ comment.created_date }}</p>
+                            <div class="row justify-content-center">
+                                <div class="col-4">
+                                    <hr/>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Nobody has commented on this article, yet. Do you want to be first?</p>
+                    {% endif %}
+                    {% if has_user_joined %}
+                        <form class="mt-5" method="post" action="{% url 'articles:save_comment' space.id article.id %}">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
 
-                    <div class="row mb-4">
-                        <div class="col d-flex">
-                        </div>
+                            <div class="row mb-4">
+                                <div class="col d-flex">
+                                </div>
 
-                        <div class="col d-flex justify-content-end">
-                            {% bootstrap_button button_type="submit" content="Send" %}
-                        </div>
-                    </div>
-                </form>
-                {% else %}
-                <p class="text-center mt-5 text-muted">You must join to this colearning space to write a comment.</p>
-                {% endif %}
+                                <div class="col d-flex justify-content-end">
+                                    {% bootstrap_button button_type="submit" content="Send" %}
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <p class="text-center mt-5 text-muted">You must join to this colearning space to write a
+                            comment.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+    <link rel="stylesheet" type="text/css" href="{% static 'articles/style.css' %}">
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'articles/annotation.js' %}"></script>
 {% endblock %}
