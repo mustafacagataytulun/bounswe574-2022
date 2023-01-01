@@ -131,6 +131,7 @@ function highlightSelectedText(message, id) {
     let button = document.createElement("button")
     button.classList.add("btn")
     button.classList.add("btn-danger")
+    button.classList.add("btn-sm")
     button.classList.add("bi")
     button.classList.add("bi-trash")
     button.classList.add("annotation-delete")
@@ -379,7 +380,7 @@ function highlight(target, message, id, prefix, suffix) {
             "<button " +
             " id='" + id + "'" +
             " style='display: none;'" +
-            " class='btn btn-danger bi bi-trash annotation-delete'></button> " +
+            " class='btn btn-danger btn-sm bi bi-trash annotation-delete'></button> " +
             innerHTML.substring(index + target.length);
         article.innerHTML = innerHTML;
         allAnnotations.push({
