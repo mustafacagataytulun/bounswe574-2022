@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   cloudrun: circleci/gcp-cloud-run@1.0.2
   gcr: circleci/gcp-gcr@0.15.0
-  sonarcloud: sonarsource/sonarcloud@1.0.3
 
 jobs:
   test-and-lint:
@@ -36,7 +35,6 @@ jobs:
             pytest --junitxml=test-results/junit.xml colearnapp
       - store_test_results:
           path: test-results
-      - sonarcloud/scan
       
   build-and-push:
     docker:
