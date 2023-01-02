@@ -1,6 +1,6 @@
 import os
 import logging
-import requests # pylint: disable=import-error
+import requests
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
