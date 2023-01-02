@@ -313,10 +313,9 @@ function addMouseOutListenerToAnnotation(ids) {
     let span = document.getElementById(ids["spanId"])
     span.addEventListener("mouseout", () => {
         let buttonId = ids["buttonId"]
-        let timeout = setTimeout(() => {
+        annotationDeleteBtnTimeout[buttonId] = setTimeout(() => {
             hideButton(buttonId)
         }, 2000)
-        annotationDeleteBtnTimeout[buttonId] = timeout
     })
 
 
@@ -325,6 +324,7 @@ function addMouseOutListenerToAnnotation(ids) {
 function hideButton(buttonId) {
     let button = document.getElementById(buttonId)
     button.setAttribute("style", "display: none")
+    delete annotationDeleteBtnTimeout[buttonId]
 }
 
 function onAnnotationDeleteButtonPressed(ids) {
