@@ -3,7 +3,7 @@ let log = console.log;
 
 let annotationServiceURL = "https://annotations.mustafatulun.com/annotations/"
 let chCountForPrefixSuffix = 20;
-let minChCountToAnnotateText = 20;
+let minChCountToAnnotateText = 5;
 let maxChCountToAnnotateText = 100;
 let selection = null
 let allAnnotations = []
